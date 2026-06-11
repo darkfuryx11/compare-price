@@ -32,6 +32,20 @@ body{
   min-height:100dvh;
 }
 #root{max-width:480px;margin:0 auto;padding-bottom:max(env(safe-area-inset-bottom,0px),24px);}
+/* desktop: 2-column layout */
+.mobile-only{display:block;}
+.desktop-only{display:none;}
+.mobile-hidden{display:none;}
+.col-hd{font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--text-2);margin-bottom:12px;padding:0 2px;}
+@media(min-width:900px){
+  #root{max-width:1000px;}
+  .app{padding:6px 24px 4px;}
+  .dual-col{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;}
+  .mobile-only{display:none;}
+  .desktop-only{display:block;}
+  .mobile-hidden{display:block;}
+  .fab-save{right:24px;}
+}
 .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;}
 
 /* app shell */
@@ -208,6 +222,25 @@ body{
 .list-empty{text-align:center;padding:48px 20px;color:var(--text-3);font-size:13.5px;line-height:1.7;}
 .list-empty .le-icon{font-size:36px;margin-bottom:12px;opacity:.4;}
 .hint{font-size:11.5px;color:var(--text-3);text-align:center;padding:10px 0 6px;}
+
+/* floating save button */
+.fab-save{
+  position:fixed;
+  right:max(env(safe-area-inset-right,0px) + 20px, 20px);
+  bottom:max(env(safe-area-inset-bottom,0px) + 20px, 20px);
+  z-index:999;
+  display:flex;align-items:center;gap:9px;
+  background:var(--accent);color:#fff;
+  border:none;border-radius:999px;
+  padding:0 20px 0 16px;height:52px;
+  font-family:inherit;font-size:15px;font-weight:500;
+  cursor:pointer;-webkit-appearance:none;appearance:none;
+  box-shadow:0 4px 18px rgba(29,158,117,0.38),0 1px 4px rgba(0,0,0,0.12);
+  transition:transform .15s,box-shadow .15s,background .15s;
+}
+.fab-save:active{transform:scale(0.95);box-shadow:0 2px 8px rgba(29,158,117,0.3);}
+.fab-save.flash{background:#15835F;}
+.fab-save svg{flex:none;}
 
 /* login */
 .login-wrap{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px 20px;background:var(--bg-app);}
@@ -882,7 +915,7 @@ function Main() {
       <div className="appbar">
         <button className="iconbtn" onClick={()=>setScreen('list')} aria-label="รายการ"><IconList /></button>
         <div className="title">นำเข้าจากจีน<small>Landed-cost calculator</small></div>
-        <button className={`iconbtn${productId?' accent':''}`} onClick={saveProduct} aria-label="บันทึก"><IconSave /></button>
+        <div style={{width:'38px'}}></div>
       </div>
 
       <div className="name-row">
@@ -895,11 +928,14 @@ function Main() {
       </div>
 
       <RateBar rate={rate} info={info} onRefresh={refresh} />
-      <ModeToggle mode={mode} onMode={setMode} />
 
-      {mode==='fwd' ? (
-        <>
-          {/* shared qty */}
+      {/* Mobile only: mode toggle */}
+      <div className="mobile-only"><ModeToggle mode={mode} onMode={setMode} /></div>
+
+      <div className="dual-col">
+        {/* ── LEFT: จีน → ไทย ── */}
+        <div className={mode!=='fwd'?'mobile-hidden':''}>
+          <div className="col-hd desktop-only">ราคาจีน <span style={{color:'var(--accent)'}}>→</span> ไทย</div>
           <div className="qty-bar">
             <span className="qty-bar-label">จำนวนที่ซื้อ</span>
             <div className="qty-bar-input">
@@ -908,7 +944,6 @@ function Main() {
               <span className="qs">ชิ้น</span>
             </div>
           </div>
-          {/* supplier rows */}
           {suppliers.map(s => (
             <SupplierRow key={s.id} s={s}
               cmpRank={rankById[s.id]||0}
@@ -917,10 +952,18 @@ function Main() {
             />
           ))}
           <button className="addrow-btn" onClick={()=>setSuppliers(prev=>[...prev,newSupplier()])}><IconPlus /> เพิ่มร้านค้า</button>
-        </>
-      ) : (
-        <>
-          {/* competitor rows */}
+          <div className="card" style={{marginTop:'14px'}}>
+            <div className="field">
+              <span className="fl">ราคาขายในไทย / ชิ้น — ใส่เพื่อดูกำไร (ไม่บังคับ)</span>
+              <NumInput value={sell} onChange={setSell} prefix="฿" suffix="THB" />
+            </div>
+          </div>
+          <CompareResult results={cmpResults} qty={qty} sell={sell} fees={fees} rate={rate} />
+        </div>
+
+        {/* ── RIGHT: ไทย → จีน ── */}
+        <div className={mode!=='rev'?'mobile-hidden':''}>
+          <div className="col-hd desktop-only">ราคาไทย <span style={{color:'var(--text-3)'}}>→</span> จีน</div>
           {competitors.map(c => (
             <CompetitorRow key={c.id} c={c}
               cmpRank={revRankById[c.id]||0}
@@ -929,31 +972,25 @@ function Main() {
             />
           ))}
           <button className="addrow-btn" onClick={()=>setCompetitors(prev=>[...prev,newCompetitor()])}><IconPlus /> เพิ่มร้าน / คู่แข่ง</button>
-        </>
-      )}
+          <CompareRevResult results={revResults} />
+        </div>
+      </div>
 
-      <div className="fees-head">
+      {/* Shared fees — full width */}
+      <div className="fees-head" style={{marginTop:'16px'}}>
         <span className="ft">ค่าธรรมเนียม &amp; ภาษี</span>
-        <span className="fc num">{fees.length} รายการ · ใช้ร่วมกันทุกร้าน</span>
+        <span className="fc num">{fees.length} รายการ · ใช้ร่วมกัน</span>
       </div>
       {fees.map(f => <FeeRow key={f.id} fee={f} onChange={(nf)=>updFee(f.id,nf)} onDelete={()=>delFee(f.id)} />)}
       <button className="addfee" onClick={addFee}><IconPlus /> เพิ่มค่าธรรมเนียม</button>
 
-      {mode==='fwd' && (
-        <div className="card" style={{marginTop:'14px'}}>
-          <div className="field">
-            <span className="fl">ราคาขายในไทย / ชิ้น — ใส่เพื่อดูกำไร (ไม่บังคับ)</span>
-            <NumInput value={sell} onChange={setSell} prefix="฿" suffix="THB" />
-          </div>
-        </div>
-      )}
+      <div className="hint" style={{paddingBottom:'80px'}}>ตัวเลขอัปเดตอัตโนมัติเมื่อพิมพ์ · อัตราแลกเปลี่ยนอัปเดตทุก 10 นาที</div>
 
-      {mode==='fwd'
-        ? <CompareResult results={cmpResults} qty={qty} sell={sell} fees={fees} rate={rate} />
-        : <CompareRevResult results={revResults} />
-      }
-
-      <div className="hint">ตัวเลขอัปเดตอัตโนมัติเมื่อพิมพ์ · อัตราแลกเปลี่ยนอัปเดตทุก 10 นาที</div>
+      {/* Floating save button */}
+      <button className={`fab-save${savedFlash?' flash':''}`} onClick={saveProduct} aria-label="บันทึก">
+        <IconSave />
+        {savedFlash ? 'บันทึกแล้ว ✓' : 'บันทึก'}
+      </button>
     </div>
   );
 }
