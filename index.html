@@ -992,14 +992,19 @@ function Main() {
     const name = productName.trim();
     if (!name) { nameRef.current?.focus(); nameRef.current?.select(); return; }
     const id = productId || (IS_EMBEDDED ? crypto.randomUUID() : String(uid()));
-    const preview = mode==='rev'
-      ? {cny:revResults[0]?.cny||0, goodsThb:revResults[0]?.goodsThb||0}
-      : {perUnit:cmpResults[0]?.perUnit||0, total:cmpResults[0]?.total||0};
+    const preview = {
+      perUnit: cmpResults[0]?.perUnit||0,
+      total:   cmpResults[0]?.total||0,
+      cny:     revResults[0]?.cny||0,
+      goodsThb:revResults[0]?.goodsThb||0,
+    };
     const record = {
       id, name, mode,
-      inputs: mode==='rev'
-        ? {competitors:competitors.map(c=>({...c}))}
-        : {suppliers:suppliers.map(s=>({...s})), qty, sell},
+      inputs: {
+        suppliers: suppliers.map(s=>({...s})),
+        qty, sell,
+        competitors: competitors.map(c=>({...c})),
+      },
       fees: fees.map(f=>({...f})),
       preview,
       image_url: productImage,
@@ -1028,26 +1033,23 @@ function Main() {
     const m = p.mode==='cmp'?'fwd':p.mode;
     setMode(m);
     setFees(p.fees.map(f=>({...f,id:uid()})));
-    if (m==='rev') {
-      if (Array.isArray(p.inputs.competitors) && p.inputs.competitors.length > 0) {
-        setCompetitors(p.inputs.competitors.map(c=>({...c,id:uid()})));
-      } else if (p.inputs.packPrice) {
-        /* migrate old single-competitor format */
-        setCompetitors([{id:uid(), name:'คู่แข่ง', packPrice:p.inputs.packPrice||'0', packQty:p.inputs.packQty||'100', compMargin:p.inputs.compMargin||'0', link:'', contact:''}]);
-      } else {
-        setCompetitors(demoCompetitors());
-      }
+    // Always load suppliers — fix: desktop saves both sides regardless of mode
+    if (Array.isArray(p.inputs.suppliers) && p.inputs.suppliers.length > 0) {
+      setSuppliers(p.inputs.suppliers.map(s=>({...s,id:uid()})));
+    } else if (p.inputs.cny) {
+      setSuppliers([{id:uid(), name:'ร้านค้า', unitType:p.inputs.isPack?'pack':'unit', unitCny:p.inputs.cny||'0', packCny:p.inputs.packCny||'', packUnits:p.inputs.packUnits||'100', link:'', contact:'', image_url:''}]);
     } else {
-      if (Array.isArray(p.inputs.suppliers) && p.inputs.suppliers.length > 0) {
-        setSuppliers(p.inputs.suppliers.map(s=>({...s,id:uid()})));
-      } else if (p.inputs.cny) {
-        /* migrate old single-supplier format */
-        setSuppliers([{id:uid(), name:'ร้านค้า', unitType:p.inputs.isPack?'pack':'unit', unitCny:p.inputs.cny||'0', packCny:p.inputs.packCny||'', packUnits:p.inputs.packUnits||'100', link:'', contact:''}]);
-      } else {
-        setSuppliers(demoSuppliers());
-      }
-      setQty(p.inputs.qty||p.inputs.cmpQty||'100');
-      setSell(p.inputs.sell||'');
+      setSuppliers(demoSuppliers());
+    }
+    setQty(p.inputs.qty||p.inputs.cmpQty||'100');
+    setSell(p.inputs.sell||'');
+    // Always load competitors — fix: same reason
+    if (Array.isArray(p.inputs.competitors) && p.inputs.competitors.length > 0) {
+      setCompetitors(p.inputs.competitors.map(c=>({...c,id:uid()})));
+    } else if (p.inputs.packPrice) {
+      setCompetitors([{id:uid(), name:'คู่แข่ง', packPrice:p.inputs.packPrice||'0', packQty:p.inputs.packQty||'100', compMargin:p.inputs.compMargin||'0', link:'', contact:'', image_url:''}]);
+    } else {
+      setCompetitors(demoCompetitors());
     }
     setScreen('calc');
   };
