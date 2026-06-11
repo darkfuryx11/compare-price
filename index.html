@@ -228,11 +228,35 @@ body{
 </head>
 <body>
 <div id="root"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" crossorigin></script>
 <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin></script>
 <script type="text/babel">
 const { useState, useEffect, useCallback, useRef } = React;
+
+/* === EMBEDDED MODE (ERP iframe) === */
+const IS_EMBEDDED = new URLSearchParams(window.location.search).get('embedded') === '1';
+const SUPABASE_URL  = 'https://hrcuwviuqzgfqpdjtqcw.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_CPRxITDk9Hu8cV3YCi0Plw_z65FqtRx';
+
+// Supabase client — init lazily on sh-session message from ERP shell
+let _sbCmp = null;
+if (IS_EMBEDDED) {
+  window.addEventListener('message', (e) => {
+    if (e.data?.type === 'sh-session' && e.data.access_token) {
+      _sbCmp = supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
+        auth: { persistSession: false }
+      });
+      _sbCmp.auth.setSession({
+        access_token: e.data.access_token,
+        refresh_token: e.data.refresh_token
+      }).then(() => {
+        window.dispatchEvent(new CustomEvent('cp-sb-ready'));
+      });
+    }
+  });
+}
 
 /* === AUTH === */
 const PWD_HASH = '68a04e7a0ab471b4b419cebdf06a895bb7e0f66b2a4d0ac445f08194ab9d6627';
@@ -241,7 +265,10 @@ async function sha256(str) {
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
 }
 function useAuth() {
-  const [authed, setAuthed] = useState(() => { try { return sessionStorage.getItem('cp_auth')==='ok'; } catch(e){ return false; } });
+  const [authed, setAuthed] = useState(() => {
+    if (IS_EMBEDDED) return true; // ERP shell already authenticated
+    try { return sessionStorage.getItem('cp_auth')==='ok'; } catch(e){ return false; }
+  });
   const login = async (pwd) => { const h = await sha256(pwd); if(h===PWD_HASH){ try{sessionStorage.setItem('cp_auth','ok');}catch(e){} setAuthed(true); return true; } return false; };
   return { authed, login };
 }
@@ -714,11 +741,26 @@ const demoCompetitors = () => ([
 function Main() {
   const {rate, info, refresh} = useExchangeRate();
   const [screen, setScreen] = useState('calc');
-  const [products, setProducts] = useState(() => loadLS('cp_products', []));
+  const [products, setProducts] = useState(() => IS_EMBEDDED ? [] : loadLS('cp_products', []));
   const [productName, setProductName] = useState('');
   const [productId, setProductId] = useState(null);
   const [savedFlash, setSavedFlash] = useState(false);
   const nameRef = useRef(null);
+
+  // Supabase load/save (embedded mode only)
+  const loadFromDB = useCallback(async () => {
+    if (!_sbCmp) return;
+    const { data } = await _sbCmp.from('compare_products')
+      .select('*').order('updated_at', { ascending: false });
+    if (data) setProducts(data.map(r => ({ ...r, savedAt: new Date(r.updated_at).getTime() })));
+  }, []);
+
+  useEffect(() => {
+    if (!IS_EMBEDDED) return;
+    const handler = () => loadFromDB();
+    window.addEventListener('cp-sb-ready', handler);
+    return () => window.removeEventListener('cp-sb-ready', handler);
+  }, [loadFromDB]);
 
   const [mode, setMode] = useState('fwd');
   const [fees, setFees] = useState(demoFees);
@@ -756,7 +798,17 @@ function Main() {
       savedAt: Date.now(),
     };
     const next = productId ? products.map(p=>p.id===productId?record:p) : [...products, record];
-    setProducts(next); setProductId(id); saveLS('cp_products', next);
+    setProducts(next); setProductId(id);
+    if (IS_EMBEDDED && _sbCmp) {
+      _sbCmp.from('compare_products').upsert({
+        id, name, mode,
+        inputs: record.inputs,
+        fees: record.fees,
+        preview: record.preview,
+      }).then();
+    } else {
+      saveLS('cp_products', next);
+    }
     setSavedFlash(true); setTimeout(()=>setSavedFlash(false), 1500);
   };
 
@@ -791,7 +843,12 @@ function Main() {
 
   const deleteProduct = (id) => {
     const next = products.filter(p=>p.id!==id);
-    setProducts(next); saveLS('cp_products', next);
+    setProducts(next);
+    if (IS_EMBEDDED && _sbCmp) {
+      _sbCmp.from('compare_products').delete().eq('id', id).then();
+    } else {
+      saveLS('cp_products', next);
+    }
     if (productId===id) setProductId(null);
   };
 
