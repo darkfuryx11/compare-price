@@ -1,0 +1,13 @@
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/manifest.json
+  Cache-Control: max-age=86400
+
+/*.svg
+  Cache-Control: max-age=604800
+
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff

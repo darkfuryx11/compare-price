@@ -1,0 +1,7 @@
+{
+  "name": "compare-price",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler pages deploy . --project-name compare-price --commit-dirty=true"
+  }
+}

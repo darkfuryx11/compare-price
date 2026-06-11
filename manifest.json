@@ -1,0 +1,25 @@
+{
+  "name": "ต้นทุนนำเข้า · จีน→ไทย",
+  "short_name": "ราคานำเข้า",
+  "description": "คำนวณต้นทุนนำเข้าจากจีน และถอดราคาคู่แข่ง",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FBFAF7",
+  "theme_color": "#FBFAF7",
+  "orientation": "portrait-primary",
+  "lang": "th",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
