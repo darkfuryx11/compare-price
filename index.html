@@ -179,6 +179,44 @@ body{
 .mstat .mv.neg{color:var(--neg);}
 .rev-note{font-size:12px;color:var(--text-2);background:var(--bg-inset);border:0.5px solid var(--border);border-radius:var(--r-sm);padding:9px 12px;margin-top:14px;line-height:1.5;}
 .hint{font-size:11.5px;color:var(--text-3);text-align:center;padding:10px 0 6px;}
+
+/* === LOGIN === */
+.login-wrap{
+  min-height:100dvh;display:flex;align-items:center;justify-content:center;
+  padding:24px 20px;background:var(--bg-app);
+}
+.login-card{
+  width:100%;max-width:340px;background:var(--bg-card);
+  border:0.5px solid var(--border);border-radius:var(--r-lg);padding:32px 24px 28px;
+  display:flex;flex-direction:column;gap:20px;
+}
+.login-logo{
+  display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;
+}
+.login-logo .logo-icon{
+  width:52px;height:52px;border-radius:14px;background:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:700;color:#fff;letter-spacing:-1px;
+  line-height:1;font-family:'IBM Plex Mono',monospace;
+}
+.login-logo .logo-title{font-size:16px;font-weight:500;letter-spacing:-0.01em;}
+.login-logo .logo-sub{font-size:12px;color:var(--text-3);}
+.login-field{display:flex;flex-direction:column;gap:8px;}
+.login-field label{font-size:11.5px;color:var(--text-2);font-weight:500;}
+.login-field .inputwrap{min-height:48px;}
+.login-field .inputwrap input{font-size:16px;}
+.login-btn{
+  width:100%;min-height:48px;background:var(--accent);color:#fff;
+  border:none;border-radius:var(--r-md);font-family:inherit;font-size:15px;
+  font-weight:500;cursor:pointer;-webkit-appearance:none;appearance:none;
+  transition:opacity .15s;
+}
+.login-btn:active{opacity:.8;}
+.login-btn:disabled{opacity:.5;cursor:default;}
+.login-err{
+  font-size:12.5px;color:var(--neg);text-align:center;
+  background:var(--neg-bg);border-radius:var(--r-sm);padding:8px 12px;
+}
 </style>
 </head>
 <body>
@@ -187,7 +225,79 @@ body{
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin></script>
 <script type="text/babel">
-const { useState, useEffect, useCallback } = React;
+const { useState, useEffect, useCallback, useRef } = React;
+
+/* === AUTH === */
+const PWD_HASH = '68a04e7a0ab471b4b419cebdf06a895bb7e0f66b2a4d0ac445f08194ab9d6627';
+
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+function useAuth() {
+  const [authed, setAuthed] = useState(() => {
+    try { return sessionStorage.getItem('cp_auth') === 'ok'; } catch(e) { return false; }
+  });
+  const login = async (pwd) => {
+    const h = await sha256(pwd);
+    if (h === PWD_HASH) {
+      try { sessionStorage.setItem('cp_auth','ok'); } catch(e){}
+      setAuthed(true);
+      return true;
+    }
+    return false;
+  };
+  return { authed, login };
+}
+
+function LoginScreen({ onLogin }) {
+  const [pwd, setPwd] = useState('');
+  const [err, setErr] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const inputRef = useRef(null);
+
+  useEffect(() => { inputRef.current?.focus(); }, []);
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (!pwd || loading) return;
+    setLoading(true);
+    setErr(false);
+    const ok = await onLogin(pwd);
+    if (!ok) { setErr(true); setPwd(''); setLoading(false); inputRef.current?.focus(); }
+  };
+
+  return (
+    <div className="login-wrap">
+      <form className="login-card" onSubmit={submit}>
+        <div className="login-logo">
+          <div className="logo-icon">¥฿</div>
+          <div className="logo-title">ต้นทุนนำเข้า</div>
+          <div className="logo-sub">Landed-cost calculator · จีน→ไทย</div>
+        </div>
+        <div className="login-field">
+          <label htmlFor="pwd-input">รหัสผ่าน</label>
+          <div className="inputwrap">
+            <input
+              id="pwd-input"
+              ref={inputRef}
+              type="password"
+              value={pwd}
+              onChange={e => { setPwd(e.target.value); setErr(false); }}
+              placeholder="กรอกรหัสผ่าน"
+              autoComplete="current-password"
+            />
+          </div>
+        </div>
+        {err && <div className="login-err">รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่</div>}
+        <button className="login-btn" type="submit" disabled={loading || !pwd}>
+          {loading ? 'กำลังตรวจสอบ…' : 'เข้าสู่ระบบ'}
+        </button>
+      </form>
+    </div>
+  );
+}
 
 const fmt = (n, d=2) => (isFinite(n)?n:0).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
 const THB = (n, d=2) => '฿'+fmt(n,d);
@@ -413,6 +523,13 @@ const demoFees = () => ([
 ]);
 
 function App() {
+  const { authed, login } = useAuth();
+  if (!authed) return <LoginScreen onLogin={login} />;
+
+  return <Calculator />;
+}
+
+function Calculator() {
   const {rate, info, refresh} = useExchangeRate();
   const [mode, setMode] = useState('fwd');
   const [cny, setCny] = useState('45');
