@@ -755,11 +755,26 @@ function Main() {
     if (data) setProducts(data.map(r => ({ ...r, savedAt: new Date(r.updated_at).getTime() })));
   }, []);
 
+  const rtChannelRef = useRef(null);
+
   useEffect(() => {
     if (!IS_EMBEDDED) return;
-    const handler = () => loadFromDB();
+    const handler = () => {
+      loadFromDB();
+      // Realtime subscription — sync across devices instantly
+      if (rtChannelRef.current) _sbCmp.removeChannel(rtChannelRef.current);
+      rtChannelRef.current = _sbCmp
+        .channel('compare_products_rt')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'compare_products' },
+          () => loadFromDB()
+        )
+        .subscribe();
+    };
     window.addEventListener('cp-sb-ready', handler);
-    return () => window.removeEventListener('cp-sb-ready', handler);
+    return () => {
+      window.removeEventListener('cp-sb-ready', handler);
+      if (rtChannelRef.current && _sbCmp) _sbCmp.removeChannel(rtChannelRef.current);
+    };
   }, [loadFromDB]);
 
   const [mode, setMode] = useState('fwd');
