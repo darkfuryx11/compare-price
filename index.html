@@ -33,7 +33,6 @@ body{
 }
 #root{max-width:480px;margin:0 auto;padding-bottom:max(env(safe-area-inset-bottom,0px),24px);}
 .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;}
-.mono{font-family:'IBM Plex Mono','IBM Plex Sans Thai',monospace;font-variant-numeric:tabular-nums;}
 
 /* app shell */
 .app{padding:6px 16px 4px;}
@@ -52,30 +51,15 @@ body{
 .iconbtn.accent{border-color:var(--accent);color:var(--accent);}
 
 /* name row */
-.name-row{
-  display:flex;align-items:center;gap:8px;
-  border-bottom:0.5px solid var(--border);margin-bottom:14px;padding-bottom:12px;
-}
-.name-input{
-  flex:1;border:none;background:transparent;outline:none;
-  font-family:inherit;font-size:14px;font-weight:500;color:var(--text);padding:6px 0;
-}
+.name-row{display:flex;align-items:center;gap:8px;border-bottom:0.5px solid var(--border);margin-bottom:14px;padding-bottom:12px;}
+.name-input{flex:1;border:none;background:transparent;outline:none;font-family:inherit;font-size:14px;font-weight:500;color:var(--text);padding:6px 0;}
 .name-input::placeholder{color:var(--text-3);font-weight:400;}
 .name-saved{font-size:11px;color:var(--pos);font-weight:500;white-space:nowrap;animation:fade-out 1.5s forwards;}
 @keyframes fade-out{0%,60%{opacity:1;}100%{opacity:0;}}
-.name-new-btn{
-  border:none;background:transparent;cursor:pointer;padding:4px 8px;
-  font-family:inherit;font-size:11.5px;font-weight:500;color:var(--text-3);
-  -webkit-appearance:none;appearance:none;border-radius:6px;white-space:nowrap;
-}
-.name-new-btn:active{color:var(--text);}
+.name-new-btn{border:none;background:transparent;cursor:pointer;padding:4px 8px;font-family:inherit;font-size:11.5px;font-weight:500;color:var(--text-3);-webkit-appearance:none;appearance:none;border-radius:6px;white-space:nowrap;}
 
 /* rate bar */
-.ratebar{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:13px 15px;border:0.5px solid var(--border);border-radius:var(--r-md);
-  background:var(--bg-card);margin-bottom:14px;cursor:pointer;
-}
+.ratebar{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;border:0.5px solid var(--border);border-radius:var(--r-md);background:var(--bg-card);margin-bottom:14px;cursor:pointer;}
 .ratebar .rb-left{display:flex;flex-direction:column;gap:3px;}
 .ratebar .rb-label{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--text-2);}
 .livedot{width:7px;height:7px;border-radius:50%;background:var(--accent);position:relative;flex:none;}
@@ -91,109 +75,27 @@ body{
 .ratebar .rb-delta{font-size:11.5px;font-weight:500;}
 .ratebar .rb-time{font-size:10.5px;color:var(--text-3);white-space:nowrap;}
 
-/* mode toggle — 3-button friendly */
+/* mode toggle */
 .modetoggle{display:flex;background:var(--bg-inset);border:0.5px solid var(--border);border-radius:var(--r-md);padding:3px;margin-bottom:16px;gap:3px;}
-.modetoggle button{flex:1;min-height:42px;border:none;background:transparent;border-radius:9px;cursor:pointer;font-family:inherit;font-size:12px;color:var(--text-2);font-weight:400;display:flex;align-items:center;justify-content:center;gap:5px;transition:background .15s,color .15s;-webkit-appearance:none;appearance:none;padding:0 4px;text-align:center;line-height:1.3;}
+.modetoggle button{flex:1;min-height:44px;border:none;background:transparent;border-radius:9px;cursor:pointer;font-family:inherit;font-size:13.5px;color:var(--text-2);font-weight:400;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .15s,color .15s;-webkit-appearance:none;appearance:none;}
 .modetoggle button.active{background:var(--bg-card);color:var(--text);font-weight:500;border:0.5px solid var(--border);}
 .modetoggle button .arr{color:var(--text-3);}
 .modetoggle button.active .arr{color:var(--accent);}
 
-/* mode chips (ต่อชิ้น / ยกแพค) */
+/* mode chips */
 .mode-chips{display:flex;gap:2px;background:var(--bg-inset);border:0.5px solid var(--border);border-radius:7px;padding:2px;}
 .mode-chips button{padding:3px 9px;border:none;border-radius:5px;font-family:inherit;font-size:11px;font-weight:500;color:var(--text-3);background:transparent;cursor:pointer;min-height:26px;-webkit-appearance:none;appearance:none;}
 .mode-chips button.active{background:var(--bg-card);color:var(--text);border:0.5px solid var(--border);}
 
-/* pack derived / autofill */
-.pack-derived{font-size:12.5px;color:var(--text-2);margin-top:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
-.pack-derived b{font-weight:500;color:var(--accent);}
-.pack-formula{font-size:11.5px;color:var(--text-3);}
+/* shared qty card */
+.qty-bar{display:flex;align-items:center;gap:10px;background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--r-md);padding:10px 14px;margin-bottom:12px;}
+.qty-bar-label{font-size:12px;color:var(--text-2);font-weight:500;flex:none;}
+.qty-bar-input{display:flex;align-items:center;gap:6px;background:var(--bg-inset);border:0.5px solid var(--border);border-radius:8px;padding:0 11px;min-height:40px;flex:1;transition:border-color .15s;}
+.qty-bar-input:focus-within{border-color:var(--accent);}
+.qty-bar-input input{border:none;background:transparent;outline:none;font-family:inherit;font-size:16px;font-weight:500;color:var(--text);width:100%;padding:0;font-variant-numeric:tabular-nums;}
+.qty-bar-input .qs{font-size:12px;color:var(--text-3);}
 
-/* cards */
-.card{background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:16px;margin-bottom:14px;}
-.card-label{font-size:11.5px;color:var(--text-2);font-weight:500;letter-spacing:.01em;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
-.price-grid{display:grid;grid-template-columns:1fr 116px;gap:10px;}
-.field{display:flex;flex-direction:column;gap:6px;}
-.field .fl{font-size:11px;color:var(--text-3);font-weight:400;}
-.inputwrap{display:flex;align-items:center;gap:6px;background:var(--bg-inset);border:0.5px solid var(--border);border-radius:var(--r-sm);padding:0 12px;min-height:52px;transition:border-color .15s;}
-.inputwrap:focus-within{border-color:var(--accent);background:var(--bg-card);}
-.inputwrap .pfx{font-size:17px;color:var(--text-3);font-weight:500;}
-.inputwrap .sfx{font-size:12px;color:var(--text-3);white-space:nowrap;}
-.inputwrap input{border:none;background:transparent;outline:none;font-family:inherit;font-size:19px;font-weight:500;color:var(--text);width:100%;min-width:0;padding:0;font-variant-numeric:tabular-nums;}
-.inputwrap input::placeholder{color:var(--text-3);font-weight:400;}
-.inputwrap input[readonly]{color:var(--text-3);}
-.inputwrap.autofill{background:var(--accent-soft)!important;border-color:var(--accent)!important;}
-.inputwrap.autofill input{color:var(--accent)!important;font-weight:500!important;}
-.inputwrap.autofill .pfx{color:var(--accent)!important;}
-.autofill-chip{font-size:9.5px;color:var(--accent);font-weight:600;letter-spacing:.04em;display:inline;}
-
-/* fees */
-.fees-head{display:flex;align-items:center;justify-content:space-between;margin:2px 2px 10px;}
-.fees-head .ft{font-size:11.5px;color:var(--text-2);font-weight:500;letter-spacing:.06em;text-transform:uppercase;}
-.fees-head .fc{font-size:11.5px;color:var(--text-3);}
-.feerow{display:flex;align-items:center;gap:8px;background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--r-md);padding:7px 8px 7px 12px;margin-bottom:9px;}
-.feerow.empty{border-style:dashed;background:transparent;}
-.feerow .fname{flex:1;min-width:0;border:none;background:transparent;outline:none;font-family:inherit;font-size:14px;color:var(--text);font-weight:400;padding:8px 0;}
-.feerow .fname::placeholder{color:var(--text-3);}
-.feerow .famt{width:62px;border:none;background:transparent;outline:none;font-family:inherit;font-size:15px;font-weight:500;color:var(--text);text-align:right;padding:8px 0;font-variant-numeric:tabular-nums;}
-.feerow .famt::placeholder{color:var(--text-3);font-weight:400;}
-.unittoggle{display:flex;background:var(--bg-inset);border:0.5px solid var(--border);border-radius:8px;padding:2px;flex:none;}
-.unittoggle button{width:30px;height:32px;border:none;background:transparent;border-radius:6px;cursor:pointer;font-family:inherit;font-size:14px;color:var(--text-3);font-weight:500;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;appearance:none;}
-.unittoggle button.on{background:var(--accent);color:#fff;}
-.delbtn{width:32px;height:44px;border:none;background:transparent;cursor:pointer;color:var(--text-3);display:flex;align-items:center;justify-content:center;flex:none;border-radius:8px;-webkit-appearance:none;appearance:none;}
-.addfee{width:100%;min-height:46px;border:0.5px dashed var(--border-strong);background:transparent;border-radius:var(--r-md);color:var(--text-2);font-family:inherit;font-size:13.5px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:2px;-webkit-appearance:none;appearance:none;transition:border-color .15s,color .15s;}
-.addfee:active{border-color:var(--accent);color:var(--accent);}
-
-.sellrow{margin-top:14px;}
-.derived{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:12px;font-size:12px;color:var(--text-2);}
-.derived span{white-space:nowrap;}
-.derived b{font-weight:500;color:var(--text);}
-.divider-soft{height:0.5px;background:var(--border);margin:14px 0;}
-
-/* result */
-.result{background:var(--bg-secondary);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:18px 17px;margin-top:16px;}
-.result .res-kicker{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2);font-weight:500;margin-bottom:14px;display:flex;align-items:center;gap:7px;}
-.hero{display:flex;flex-direction:column;gap:3px;}
-.hero .hv{font-size:38px;font-weight:500;letter-spacing:-0.02em;line-height:1;}
-.hero .hl{font-size:12.5px;color:var(--text-2);}
-.res-total{display:flex;align-items:baseline;justify-content:space-between;padding:13px 0 0;margin-top:13px;border-top:0.5px solid var(--border);}
-.res-total .rl{font-size:13px;color:var(--text-2);}
-.res-total .rv{font-size:17px;font-weight:500;}
-.breakdown{margin-top:14px;border-top:0.5px solid var(--border);padding-top:13px;display:flex;flex-direction:column;}
-.bd-title{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);font-weight:500;margin-bottom:8px;}
-.bd-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;font-size:13px;}
-.bd-row .bl{color:var(--text-2);display:flex;align-items:center;gap:7px;}
-.bd-row .bl .pct{font-size:10.5px;color:var(--text-3);background:var(--bg-inset);border:0.5px solid var(--border);padding:1px 6px;border-radius:5px;}
-.bd-row .bv{font-weight:500;color:var(--text);white-space:nowrap;}
-.bd-row .bv.op{color:var(--text-3);font-weight:400;}
-.margin{margin-top:15px;border-top:0.5px solid var(--border);padding-top:15px;}
-.margin-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;}
-.margin-head .mh{font-size:12.5px;color:var(--text-2);font-weight:500;}
-.badge{display:inline-flex;align-items:center;gap:5px;font-size:14px;font-weight:500;padding:5px 11px;border-radius:999px;font-variant-numeric:tabular-nums;}
-.badge.pos{background:var(--pos-bg);color:var(--pos);}
-.badge.neg{background:var(--neg-bg);color:var(--neg);}
-.badge svg{width:13px;height:13px;}
-.mstats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:0.5px solid var(--border);border-radius:var(--r-md);overflow:hidden;}
-.mstat{background:var(--bg-secondary);padding:11px 13px;display:flex;flex-direction:column;gap:3px;}
-.mstat .ml{font-size:11px;color:var(--text-2);}
-.mstat .mv{font-size:16px;font-weight:500;letter-spacing:-0.01em;}
-.mstat .mv.pos{color:var(--pos);}
-.mstat .mv.neg{color:var(--neg);}
-.rev-note{font-size:12px;color:var(--text-2);background:var(--bg-inset);border:0.5px solid var(--border);border-radius:var(--r-sm);padding:9px 12px;margin-top:14px;line-height:1.5;}
-.hint{font-size:11.5px;color:var(--text-3);text-align:center;padding:10px 0 6px;}
-
-/* product list */
-.pcard{display:flex;align-items:center;background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--r-md);padding:13px 8px 13px 15px;margin-bottom:10px;gap:8px;}
-.pcard-body{flex:1;min-width:0;cursor:pointer;}
-.pcard-name{font-size:15px;font-weight:500;color:var(--text);margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.pcard-meta{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-3);flex-wrap:wrap;}
-.pcard-tag{font-size:10.5px;font-weight:500;padding:2px 7px;border-radius:5px;background:var(--accent-soft);color:var(--accent);}
-.pcard-tag.rev{background:var(--bg-inset);color:var(--text-3);}
-.pcard-tag.cmp{background:rgba(99,102,241,0.12);color:#5b5fd4;}
-.pcard-val{font-variant-numeric:tabular-nums;}
-.list-empty{text-align:center;padding:48px 20px;color:var(--text-3);font-size:13.5px;line-height:1.7;}
-.list-empty .le-icon{font-size:36px;margin-bottom:12px;opacity:.4;}
-
-/* supplier compare — input rows */
+/* supplier / competitor rows */
 .sup-row{display:flex;align-items:flex-start;gap:8px;background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--r-md);padding:12px 8px 12px 14px;margin-bottom:10px;transition:border-color .15s,background .15s;}
 .sup-row.best{border-color:var(--accent);background:var(--accent-soft);}
 .sup-col{display:flex;flex-direction:column;gap:7px;flex:1;min-width:0;}
@@ -213,14 +115,53 @@ body{
 .sup-inputwrap input{border:none;background:transparent;outline:none;font-family:inherit;font-size:16px;font-weight:500;color:var(--text);width:100%;min-width:0;padding:0;font-variant-numeric:tabular-nums;}
 .sup-inputwrap input::placeholder{color:var(--text-3);font-weight:400;}
 .sup-derived{font-size:11.5px;color:var(--accent);font-weight:500;}
-.addsup{width:100%;min-height:44px;border:0.5px dashed var(--border-strong);background:transparent;border-radius:var(--r-md);color:var(--text-2);font-family:inherit;font-size:13.5px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:2px;-webkit-appearance:none;appearance:none;transition:border-color .15s,color .15s;}
-.addsup:active{border-color:var(--accent);color:var(--accent);}
-.cmp-qty-card{background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--r-md);padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
-.cmp-qty-label{font-size:12px;color:var(--text-2);font-weight:500;flex:none;}
-.cmp-qty-input{display:flex;align-items:center;gap:6px;background:var(--bg-inset);border:0.5px solid var(--border);border-radius:8px;padding:0 12px;min-height:42px;flex:1;transition:border-color .15s;}
-.cmp-qty-input:focus-within{border-color:var(--accent);}
-.cmp-qty-input input{border:none;background:transparent;outline:none;font-family:inherit;font-size:17px;font-weight:500;color:var(--text);width:100%;padding:0;font-variant-numeric:tabular-nums;}
-.cmp-qty-input .qs{font-size:12px;color:var(--text-3);}
+.sup-autofill{display:flex;align-items:center;gap:5px;background:var(--accent-soft);border:0.5px solid var(--accent);border-radius:8px;padding:0 10px;min-height:44px;}
+.sup-autofill .sp{font-size:14px;color:var(--accent);font-weight:500;flex:none;}
+.sup-autofill .av{font-size:16px;font-weight:500;color:var(--accent);font-variant-numeric:tabular-nums;flex:1;}
+.sup-autofill .af{font-size:10px;color:var(--accent);white-space:nowrap;}
+
+/* contact info */
+.sup-contact-row{display:flex;flex-direction:column;gap:5px;margin-top:2px;}
+.sup-meta-wrap{display:flex;align-items:center;gap:6px;background:var(--bg-inset);border:0.5px solid var(--border);border-radius:7px;padding:0 9px;min-height:34px;transition:border-color .15s;}
+.sup-meta-wrap:focus-within{border-color:var(--accent);}
+.sup-row.best .sup-meta-wrap{background:rgba(255,255,255,0.55);}
+.sup-meta-wrap .sm{font-size:12px;color:var(--text-3);flex:none;}
+.sup-meta-wrap input{border:none;background:transparent;outline:none;font-family:inherit;font-size:12.5px;color:var(--text);width:100%;min-width:0;padding:0;}
+.sup-meta-wrap input::placeholder{color:var(--text-3);}
+.sup-open-btn{border:none;background:transparent;cursor:pointer;color:var(--accent);font-size:11px;font-weight:500;font-family:inherit;padding:0 2px;flex:none;-webkit-appearance:none;white-space:nowrap;}
+
+.delbtn{width:32px;height:44px;border:none;background:transparent;cursor:pointer;color:var(--text-3);display:flex;align-items:center;justify-content:center;flex:none;border-radius:8px;-webkit-appearance:none;appearance:none;}
+.addrow-btn{width:100%;min-height:44px;border:0.5px dashed var(--border-strong);background:transparent;border-radius:var(--r-md);color:var(--text-2);font-family:inherit;font-size:13.5px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:2px;-webkit-appearance:none;appearance:none;transition:border-color .15s,color .15s;}
+.addrow-btn:active{border-color:var(--accent);color:var(--accent);}
+
+/* sell card */
+.card{background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:16px;margin-bottom:14px;}
+.card-label{font-size:11.5px;color:var(--text-2);font-weight:500;letter-spacing:.01em;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+.field{display:flex;flex-direction:column;gap:6px;}
+.field .fl{font-size:11px;color:var(--text-3);font-weight:400;}
+.inputwrap{display:flex;align-items:center;gap:6px;background:var(--bg-inset);border:0.5px solid var(--border);border-radius:var(--r-sm);padding:0 12px;min-height:52px;transition:border-color .15s;}
+.inputwrap:focus-within{border-color:var(--accent);background:var(--bg-card);}
+.inputwrap .pfx{font-size:17px;color:var(--text-3);font-weight:500;}
+.inputwrap .sfx{font-size:12px;color:var(--text-3);white-space:nowrap;}
+.inputwrap input{border:none;background:transparent;outline:none;font-family:inherit;font-size:19px;font-weight:500;color:var(--text);width:100%;min-width:0;padding:0;font-variant-numeric:tabular-nums;}
+.inputwrap input::placeholder{color:var(--text-3);font-weight:400;}
+
+/* fees */
+.fees-head{display:flex;align-items:center;justify-content:space-between;margin:2px 2px 10px;}
+.fees-head .ft{font-size:11.5px;color:var(--text-2);font-weight:500;letter-spacing:.06em;text-transform:uppercase;}
+.fees-head .fc{font-size:11.5px;color:var(--text-3);}
+.feerow{display:flex;align-items:center;gap:8px;background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--r-md);padding:7px 8px 7px 12px;margin-bottom:9px;}
+.feerow.empty{border-style:dashed;background:transparent;}
+.feerow .fname{flex:1;min-width:0;border:none;background:transparent;outline:none;font-family:inherit;font-size:14px;color:var(--text);font-weight:400;padding:8px 0;}
+.feerow .fname::placeholder{color:var(--text-3);}
+.feerow .famt{width:62px;border:none;background:transparent;outline:none;font-family:inherit;font-size:15px;font-weight:500;color:var(--text);text-align:right;padding:8px 0;font-variant-numeric:tabular-nums;}
+.feerow .famt::placeholder{color:var(--text-3);font-weight:400;}
+.unittoggle{display:flex;background:var(--bg-inset);border:0.5px solid var(--border);border-radius:8px;padding:2px;flex:none;}
+.unittoggle button{width:30px;height:32px;border:none;background:transparent;border-radius:6px;cursor:pointer;font-family:inherit;font-size:14px;color:var(--text-3);font-weight:500;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;appearance:none;}
+.unittoggle button.on{background:var(--accent);color:#fff;}
+.addfee{width:100%;min-height:46px;border:0.5px dashed var(--border-strong);background:transparent;border-radius:var(--r-md);color:var(--text-2);font-family:inherit;font-size:13.5px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:2px;-webkit-appearance:none;appearance:none;transition:border-color .15s,color .15s;}
+.addfee:active{border-color:var(--accent);color:var(--accent);}
+.divider-soft{height:0.5px;background:var(--border);margin:14px 0;}
 
 /* compare result */
 .cmp-result{background:var(--bg-secondary);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:18px 17px;margin-top:16px;}
@@ -240,6 +181,33 @@ body{
 .cmp-item.best .cmp-diff{color:var(--pos);font-size:11px;}
 .cmp-note{margin-top:13px;padding-top:13px;border-top:0.5px solid var(--border);font-size:12.5px;color:var(--text-2);line-height:1.6;}
 .cmp-empty{text-align:center;padding:28px 16px;color:var(--text-3);font-size:13px;line-height:1.7;}
+
+/* margin (best supplier) */
+.margin-section{margin-top:15px;border-top:0.5px solid var(--border);padding-top:15px;}
+.margin-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;}
+.margin-head .mh{font-size:12.5px;color:var(--text-2);font-weight:500;}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:14px;font-weight:500;padding:5px 11px;border-radius:999px;font-variant-numeric:tabular-nums;}
+.badge.pos{background:var(--pos-bg);color:var(--pos);}
+.badge.neg{background:var(--neg-bg);color:var(--neg);}
+.badge svg{width:13px;height:13px;}
+.mstats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:0.5px solid var(--border);border-radius:var(--r-md);overflow:hidden;}
+.mstat{background:var(--bg-secondary);padding:11px 13px;display:flex;flex-direction:column;gap:3px;}
+.mstat .ml{font-size:11px;color:var(--text-2);}
+.mstat .mv{font-size:16px;font-weight:500;letter-spacing:-0.01em;}
+.mstat .mv.pos{color:var(--pos);}
+.mstat .mv.neg{color:var(--neg);}
+
+/* product list */
+.pcard{display:flex;align-items:center;background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--r-md);padding:13px 8px 13px 15px;margin-bottom:10px;gap:8px;}
+.pcard-body{flex:1;min-width:0;cursor:pointer;}
+.pcard-name{font-size:15px;font-weight:500;color:var(--text);margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pcard-meta{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-3);flex-wrap:wrap;}
+.pcard-tag{font-size:10.5px;font-weight:500;padding:2px 7px;border-radius:5px;background:var(--accent-soft);color:var(--accent);}
+.pcard-tag.rev{background:var(--bg-inset);color:var(--text-3);}
+.pcard-val{font-variant-numeric:tabular-nums;}
+.list-empty{text-align:center;padding:48px 20px;color:var(--text-3);font-size:13.5px;line-height:1.7;}
+.list-empty .le-icon{font-size:36px;margin-bottom:12px;opacity:.4;}
+.hint{font-size:11.5px;color:var(--text-3);text-align:center;padding:10px 0 6px;}
 
 /* login */
 .login-wrap{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px 20px;background:var(--bg-app);}
@@ -313,7 +281,6 @@ const IconDown = () => <svg width="13" height="13" viewBox="0 0 14 14" fill="non
 const IconList = () => <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4 6h12M4 10h12M4 14h12" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/></svg>;
 const IconSave = () => <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M5 3h10a2 2 0 0 1 2 2v12a1 1 0 0 1-1.55.83L10 15.2l-5.45 2.63A1 1 0 0 1 3 17V5a2 2 0 0 1 2-2z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/></svg>;
 const IconBack = () => <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M13 4L6 10l7 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
-const IconScales = () => <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M10 3v14M6 17h8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/><path d="M4 7l3 5M16 7l-3 5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/><circle cx="4" cy="7" r="1.8" fill="currentColor"/><circle cx="16" cy="7" r="1.8" fill="currentColor"/></svg>;
 
 /* === CALC ENGINE === */
 function computeForward(cny, qty, rate, fees, sell) {
@@ -324,14 +291,10 @@ function computeForward(cny, qty, rate, fees, sell) {
   const total = goods+fixedTotal+pctTotal;
   const perUnit = qty ? total/qty : 0;
   const lines = [{label:'ค่าสินค้า', val:goods}];
-  fees.forEach(f => {
-    const a=parseFloat(f.amount)||0;
-    const v = f.type==='percent' ? goods*(a/100) : a;
-    lines.push({label:f.name||'ค่าธรรมเนียม', val:v, pct:f.type==='percent'?a:null});
-  });
+  fees.forEach(f => { const a=parseFloat(f.amount)||0; const v=f.type==='percent'?goods*(a/100):a; lines.push({label:f.name||'ค่าธรรมเนียม',val:v,pct:f.type==='percent'?a:null}); });
   const s=parseFloat(sell)||0, revenue=s*qty, profit=revenue-total;
   const margin=revenue?(profit/revenue)*100:0, markup=total?(profit/total)*100:0;
-  return {goods,fixedTotal,pctRate,pctTotal,total,perUnit,lines,hasSell:s>0,revenue,profit,margin,markup,profitUnit:qty?profit/qty:0,qty};
+  return {goods,total,perUnit,lines,hasSell:s>0,revenue,profit,margin,markup,profitUnit:qty?profit/qty:0,qty};
 }
 function computeCompetitor(packPrice, packQty, marginPct, rate, fees) {
   const unitSell=packQty?packPrice/packQty:0, m=marginPct||0, unitCost=unitSell/(1+m/100);
@@ -343,17 +306,27 @@ function computeCompetitor(packPrice, packQty, marginPct, rate, fees) {
   return {unitSell,unitCost,fixedPerUnit,pctRate,goodsThb,cny,packPrice,packQty,marginPct:m,valid:goodsThb>0};
 }
 function computeAllSuppliers(suppliers, qty, rate, fees) {
-  const q = parseFloat(qty) || 1;
+  const q = parseFloat(qty)||1;
   const results = suppliers.map(s => {
-    const uc = s.unitType==='pack'
-      ? (parseFloat(s.packCny)||0) / (parseFloat(s.packUnits)||1)
-      : (parseFloat(s.unitCny)||0);
-    if (uc <= 0) return null;
+    const uc = s.unitType==='pack' ? (parseFloat(s.packCny)||0)/(parseFloat(s.packUnits)||1) : (parseFloat(s.unitCny)||0);
+    if (uc<=0) return null;
     const r = computeForward(uc, q, rate, fees, '');
-    return { supplierId:s.id, name:s.name||'ร้านไม่มีชื่อ', effectiveUnitCny:uc, perUnit:r.perUnit, total:r.total, qty:q, rank:0, isBest:false };
+    return {supplierId:s.id, name:s.name||'ร้านไม่มีชื่อ', effectiveUnitCny:uc, perUnit:r.perUnit, total:r.total, rank:0, isBest:false};
   }).filter(Boolean);
-  results.sort((a,b) => a.perUnit - b.perUnit);
-  results.forEach((r,i) => { r.rank=i+1; r.isBest=i===0; });
+  results.sort((a,b)=>a.perUnit-b.perUnit);
+  results.forEach((r,i)=>{r.rank=i+1;r.isBest=i===0;});
+  return results;
+}
+function computeAllCompetitors(competitors, rate, fees) {
+  const results = competitors.map(c => {
+    const pp=parseFloat(c.packPrice)||0, pq=parseFloat(c.packQty)||0;
+    if(pp<=0||pq<=0) return null;
+    const comp = computeCompetitor(pp, pq, parseFloat(c.compMargin)||0, rate, fees);
+    if(!comp.valid) return null;
+    return {compId:c.id, name:c.name||'ร้านไม่มีชื่อ', unitSell:comp.unitSell, unitCost:comp.unitCost, cny:comp.cny, goodsThb:comp.goodsThb, rank:0, isBest:false};
+  }).filter(Boolean);
+  results.sort((a,b)=>a.cny-b.cny);
+  results.forEach((r,i)=>{r.rank=i+1;r.isBest=i===0;});
   return results;
 }
 
@@ -379,7 +352,7 @@ function useExchangeRate() {
   return {rate,info,refresh:doFetch};
 }
 
-/* === SHARED COMPONENTS === */
+/* === SHARED UI === */
 function RateBar({rate,info,onRefresh}) {
   const pos=(info.delta||0)>=0;
   return (
@@ -398,9 +371,8 @@ function RateBar({rate,info,onRefresh}) {
 function ModeToggle({mode,onMode}) {
   return (
     <div className="modetoggle" role="tablist">
-      <button className={mode==='fwd'?'active':''} onClick={()=>onMode('fwd')} role="tab">จีน <span className="arr">→</span> ไทย</button>
-      <button className={mode==='rev'?'active':''} onClick={()=>onMode('rev')} role="tab">ไทย <span className="arr">→</span> จีน</button>
-      <button className={mode==='cmp'?'active':''} onClick={()=>onMode('cmp')} role="tab"><IconScales /> เปรียบเทียบ</button>
+      <button className={mode==='fwd'?'active':''} onClick={()=>onMode('fwd')} role="tab">ราคาจีน <span className="arr">→</span> ไทย</button>
+      <button className={mode==='rev'?'active':''} onClick={()=>onMode('rev')} role="tab">ราคาไทย <span className="arr">→</span> จีน</button>
     </div>
   );
 }
@@ -427,61 +399,29 @@ function FeeRow({fee,onChange,onDelete}) {
     </div>
   );
 }
-function MarginBlock({r}) {
-  const pos=r.profit>=0;
+
+/* contact sub-row shared by both row types */
+function ContactRow({item, onChange}) {
   return (
-    <div className="margin">
-      <div className="margin-head"><span className="mh">กำไรขั้นต้น</span><span className={`badge ${pos?'pos':'neg'}`}>{pos?<IconUp/>:<IconDown/>}{(pos?'+':'')+fmt(r.margin,1)+'%'}</span></div>
-      <div className="mstats">
-        <div className="mstat"><span className="ml">กำไร / ชิ้น</span><span className={`mv num ${pos?'pos':'neg'}`}>{(pos?'+':'−')+THB(Math.abs(r.profitUnit))}</span></div>
-        <div className="mstat"><span className="ml">กำไรรวม</span><span className={`mv num ${pos?'pos':'neg'}`}>{(pos?'+':'−')+THB(Math.abs(r.profit),0)}</span></div>
-        <div className="mstat"><span className="ml">มาร์กอัป</span><span className="mv num">{fmt(r.markup,1)}%</span></div>
-        <div className="mstat"><span className="ml">ราคาขาย / ชิ้น</span><span className="mv num">{THB(r.revenue/(r.qty||1))}</span></div>
+    <div className="sup-contact-row">
+      <div className="sup-meta-wrap">
+        <span className="sm">🔗</span>
+        <input value={item.link||''} placeholder="ลิ้งร้าน (1688, Taobao, Line OA...)"
+          onChange={e => onChange({...item, link:e.target.value})} />
+        {item.link && item.link.length > 4 && (
+          <button className="sup-open-btn" onClick={()=>window.open(item.link.startsWith('http')?item.link:'https://'+item.link,'_blank')}>เปิด↗</button>
+        )}
       </div>
-    </div>
-  );
-}
-function ResultFwd({r}) {
-  return (
-    <div className="result">
-      <div className="res-kicker"><span className="livedot" style={{animation:'none'}}></span>ต้นทุนรวมเมื่อถึงไทย</div>
-      <div className="hero"><span className="hv num">{THB(r.perUnit)}</span><span className="hl">ต้นทุนต่อชิ้น</span></div>
-      <div className="res-total"><span className="rl">ต้นทุนทั้งหมด · {INT(r.qty)} ชิ้น</span><span className="rv num">{THB(r.total,0)}</span></div>
-      <div className="breakdown">
-        <div className="bd-title">รายละเอียด</div>
-        {r.lines.map((l,i) => <div className="bd-row" key={i}><span className="bl">{l.label}{l.pct!=null&&<span className="pct num">{l.pct}%</span>}</span><span className="bv num">{THB(l.val,0)}</span></div>)}
+      <div className="sup-meta-wrap">
+        <span className="sm">👤</span>
+        <input value={item.contact||''} placeholder="ชื่อผู้ติดต่อ / WeChat / Line"
+          onChange={e => onChange({...item, contact:e.target.value})} />
       </div>
-      {r.hasSell && <MarginBlock r={r} />}
-    </div>
-  );
-}
-function ResultRev({c,rate}) {
-  return (
-    <div className="result">
-      <div className="res-kicker"><span className="livedot" style={{animation:'none'}}></span>ราคาที่คาดว่าคู่แข่งซื้อจากจีน</div>
-      <div className="hero">
-        <span className="hv num" style={{color:c.valid?'var(--accent)':'var(--neg)'}}>≈ {CNY(c.cny)}</span>
-        <span className="hl">ต้นทุนจีนโดยประมาณ / ชิ้น · คิดเป็น <b style={{fontWeight:500,color:'var(--text)'}}>{THB(c.goodsThb)}</b></span>
-      </div>
-      <div className="breakdown">
-        <div className="bd-title">ถอดจากราคาขายคู่แข่ง</div>
-        <div className="bd-row"><span className="bl">ราคาขาย / ลัง</span><span className="bv num">{THB(c.packPrice,0)}</span></div>
-        <div className="bd-row"><span className="bl">÷ บรรจุ <span className="pct num">{INT(c.packQty)} ชิ้น</span></span><span className="bv num">{THB(c.unitSell)}<span style={{color:'var(--text-3)',fontWeight:400}}> /ชิ้น</span></span></div>
-        {c.marginPct>0 && <div className="bd-row"><span className="bl">− กำไรคู่แข่ง <span className="pct num">{fmt(c.marginPct,0)}%</span></span><span className="bv num">{THB(c.unitCost)}<span style={{color:'var(--text-3)',fontWeight:400}}> ทุน</span></span></div>}
-        <div className="bd-row"><span className="bl">− ค่าธรรมเนียมคงที่ /ชิ้น</span><span className="bv num op">−{THB(c.fixedPerUnit)}</span></div>
-        <div className="bd-row"><span className="bl">− ภาษี <span className="pct num">{c.pctRate}%</span></span><span className="bv num op">÷ {fmt(1+c.pctRate/100,2)}</span></div>
-        <div className="bd-row" style={{borderTop:'0.5px solid var(--border)',paddingTop:'10px',marginTop:'3px'}}><span className="bl" style={{color:'var(--text)'}}>= ค่าสินค้า (ไทย)</span><span className="bv num">{THB(c.goodsThb)}</span></div>
-        <div className="bd-row"><span className="bl">÷ อัตราแลกเปลี่ยน</span><span className="bv num op">÷ {fmt(rate)}</span></div>
-      </div>
-      {c.valid
-        ? <div className="rev-note">คู่แข่งน่าจะรับของจากจีนราว <b style={{fontWeight:500,color:'var(--text)'}}>{CNY(c.cny)}/ชิ้น</b> ({THB(c.goodsThb)}) — เทียบต้นทุนเราเพื่อดูว่าต่อราคาได้อีกไหม</div>
-        : <div className="rev-note" style={{color:'var(--neg)',background:'var(--neg-bg)',borderColor:'transparent'}}>ราคาขายต่ำกว่าค่าธรรมเนียม — ลองเช็กจำนวนบรรจุ / กำไรคู่แข่งอีกครั้ง</div>
-      }
     </div>
   );
 }
 
-/* === SUPPLIER ROW (compare mode) === */
+/* === SUPPLIER ROW (forward mode) === */
 function SupplierRow({s, cmpRank, onChange, onDelete}) {
   const isPack = s.unitType === 'pack';
   const uc = isPack ? (parseFloat(s.packCny)||0)/(parseFloat(s.packUnits)||1) : 0;
@@ -502,8 +442,7 @@ function SupplierRow({s, cmpRank, onChange, onDelete}) {
           <div className="sup-fields">
             <div className="sup-field">
               <span className="sf-label">ราคา / ชิ้น (CNY)</span>
-              <div className="sup-inputwrap">
-                <span className="sp">¥</span>
+              <div className="sup-inputwrap"><span className="sp">¥</span>
                 <input inputMode="decimal" value={s.unitCny} placeholder="0"
                   onChange={e => onChange({...s, unitCny:e.target.value.replace(/[^0-9.]/g,'')})} />
               </div>
@@ -514,8 +453,7 @@ function SupplierRow({s, cmpRank, onChange, onDelete}) {
             <div className="sup-fields">
               <div className="sup-field">
                 <span className="sf-label">ราคา / แพค (CNY)</span>
-                <div className="sup-inputwrap">
-                  <span className="sp">¥</span>
+                <div className="sup-inputwrap"><span className="sp">¥</span>
                   <input inputMode="decimal" value={s.packCny} placeholder="0"
                     onChange={e => onChange({...s, packCny:e.target.value.replace(/[^0-9.]/g,'')})} />
                 </div>
@@ -529,38 +467,100 @@ function SupplierRow({s, cmpRank, onChange, onDelete}) {
                 </div>
               </div>
             </div>
-            {uc > 0 && (
-              <div className="sup-derived">
-                = {CNY(uc, 4)}/ชิ้น ({s.packCny||'0'} ÷ {s.packUnits||'1'})
+            <div className="sup-fields" style={{marginTop:'2px'}}>
+              <div className="sup-field">
+                <span className="sf-label">ราคา / ชิ้น (อัตโนมัติ)</span>
+                <div className="sup-autofill">
+                  <span className="sp">¥</span>
+                  <span className="av num">{fmt(uc,4).replace(/,/g,'')}</span>
+                  <span className="af">{s.packCny||'0'}÷{s.packUnits||'1'}</span>
+                </div>
               </div>
-            )}
+            </div>
+            {uc > 0 && <div className="sup-derived">{CNY(uc,4)}/ชิ้น</div>}
           </>
         )}
+        <ContactRow item={s} onChange={onChange} />
       </div>
       <button className="delbtn" onClick={onDelete} aria-label="ลบ"><IconX /></button>
     </div>
   );
 }
 
-/* === COMPARE RESULT === */
-function CompareResult({results, qty}) {
-  const q = parseFloat(qty) || 1;
+/* === COMPETITOR ROW (reverse mode) === */
+function CompetitorRow({c, cmpRank, onChange, onDelete}) {
+  const pp=parseFloat(c.packPrice)||0, pq=parseFloat(c.packQty)||0;
+  const unitSell=pq?pp/pq:0;
+  const isBest = cmpRank===1;
+  return (
+    <div className={`sup-row${isBest?' best':''}`}>
+      <div className="sup-col">
+        <div className="sup-name-row">
+          {cmpRank > 0 && <div className="sup-rank">{cmpRank}</div>}
+          <input className="sup-name-input" value={c.name} placeholder="ชื่อร้าน / คู่แข่ง"
+            onChange={e => onChange({...c, name:e.target.value})} />
+        </div>
+        <div className="sup-fields">
+          <div className="sup-field">
+            <span className="sf-label">ราคาขาย / ลัง (THB)</span>
+            <div className="sup-inputwrap"><span className="sp">฿</span>
+              <input inputMode="decimal" value={c.packPrice} placeholder="0"
+                onChange={e => onChange({...c, packPrice:e.target.value.replace(/[^0-9.]/g,'')})} />
+            </div>
+          </div>
+          <div className="sup-field">
+            <span className="sf-label">บรรจุ / ลัง (ชิ้น)</span>
+            <div className="sup-inputwrap">
+              <input inputMode="decimal" value={c.packQty} placeholder="100"
+                onChange={e => onChange({...c, packQty:e.target.value.replace(/[^0-9.]/g,'')})} />
+              <span className="sp">ชิ้น</span>
+            </div>
+          </div>
+        </div>
+        {unitSell > 0 && (
+          <>
+            <div className="sup-derived">{THB(unitSell)}/ชิ้น</div>
+            <div className="sup-field">
+              <span className="sf-label">กำไรโดยประมาณ (ไม่บังคับ)</span>
+              <div className="sup-inputwrap">
+                <input inputMode="decimal" value={c.compMargin} placeholder="0"
+                  onChange={e => onChange({...c, compMargin:e.target.value.replace(/[^0-9.]/g,'')})} />
+                <span className="sp">%</span>
+              </div>
+            </div>
+          </>
+        )}
+        <ContactRow item={c} onChange={onChange} />
+      </div>
+      <button className="delbtn" onClick={onDelete} aria-label="ลบ"><IconX /></button>
+    </div>
+  );
+}
+
+/* === COMPARE RESULT (forward) === */
+function CompareResult({results, qty, sell, fees, rate}) {
+  const q = parseFloat(qty)||1;
+  const best = results[0];
+  const worst = results[results.length-1];
+  const s = parseFloat(sell)||0;
+  const hasSell = s > 0 && best;
+  const profit = hasSell ? s - best.perUnit : 0;
+  const margin = hasSell && s ? (profit/s)*100 : 0;
+  const pos = profit >= 0;
   if (results.length === 0) {
     return (
       <div className="cmp-result">
-        <div className="cmp-kicker"><IconScales /> เปรียบเทียบต้นทุนถึงไทย</div>
+        <div className="cmp-kicker">ต้นทุนรวมเมื่อถึงไทย</div>
         <div className="cmp-empty">กรอกราคาแต่ละร้านด้านบน<br/>จะเรียงจากถูกสุดอัตโนมัติ</div>
       </div>
     );
   }
-  const best = results[0];
-  const worst = results[results.length - 1];
   return (
     <div className="cmp-result">
-      <div className="cmp-kicker"><IconScales /> เปรียบเทียบต้นทุนถึงไทย · {INT(q)} ชิ้น</div>
+      <div className="cmp-kicker">ต้นทุนรวมถึงไทย · {INT(q)} ชิ้น</div>
       <div className="cmp-table">
         {results.map(r => {
-          const diffPct = r.isBest ? 0 : ((r.perUnit - best.perUnit) / best.perUnit) * 100;
+          const diffPct = r.isBest ? 0 : ((r.perUnit - best.perUnit)/best.perUnit)*100;
           const diffBaht = r.perUnit - best.perUnit;
           return (
             <div key={r.supplierId} className={`cmp-item${r.isBest?' best':''}`}>
@@ -570,7 +570,7 @@ function CompareResult({results, qty}) {
                 <span className="cmp-unit num">{THB(r.perUnit)}<span style={{fontSize:'12px',fontWeight:400,color:'var(--text-3)'}}>/ชิ้น</span></span>
                 {r.isBest
                   ? <span className="cmp-diff">ถูกสุด ✓</span>
-                  : <span className="cmp-diff num">+{fmt(diffPct,1)}% · {THB(diffBaht)}/ชิ้น</span>
+                  : <span className="cmp-diff num">+{fmt(diffPct,1)}% · {THB(diffBaht)}</span>
                 }
                 {q > 1 && <span className="cmp-sub num">รวม {THB(r.total,0)}</span>}
               </div>
@@ -580,9 +580,68 @@ function CompareResult({results, qty}) {
       </div>
       {results.length >= 2 && (
         <div className="cmp-note">
-          ซื้อจาก <b style={{fontWeight:500,color:'var(--text)'}}>{best.name}</b> ประหยัดกว่า <b style={{fontWeight:500,color:'var(--text)'}}>{worst.name}</b>{' '}
-          <span style={{color:'var(--pos)',fontWeight:500}} className="num">{THB(worst.perUnit - best.perUnit)}/ชิ้น</span>
-          {q > 1 && <span className="num"> · รวม {THB((worst.perUnit - best.perUnit) * q, 0)}</span>}
+          ซื้อจาก <b style={{fontWeight:500,color:'var(--text)'}}>{best.name}</b> ประหยัดกว่า{' '}
+          <b style={{fontWeight:500,color:'var(--text)'}}>{worst.name}</b>{' '}
+          <span className="num" style={{color:'var(--pos)',fontWeight:500}}>{THB(worst.perUnit-best.perUnit)}/ชิ้น</span>
+          {q>1 && <span className="num"> · รวม {THB((worst.perUnit-best.perUnit)*q,0)}</span>}
+        </div>
+      )}
+      {hasSell && (
+        <div className="margin-section">
+          <div className="margin-head">
+            <span className="mh">กำไรขั้นต้น — ซื้อจาก {best.name}</span>
+            <span className={`badge ${pos?'pos':'neg'}`}>{pos?<IconUp/>:<IconDown/>}{(pos?'+':'')+fmt(margin,1)+'%'}</span>
+          </div>
+          <div className="mstats">
+            <div className="mstat"><span className="ml">กำไร / ชิ้น</span><span className={`mv num ${pos?'pos':'neg'}`}>{(pos?'+':'−')+THB(Math.abs(profit))}</span></div>
+            <div className="mstat"><span className="ml">กำไรรวม</span><span className={`mv num ${pos?'pos':'neg'}`}>{(pos?'+':'−')+THB(Math.abs(profit*q),0)}</span></div>
+            <div className="mstat"><span className="ml">ต้นทุน / ชิ้น</span><span className="mv num">{THB(best.perUnit)}</span></div>
+            <div className="mstat"><span className="ml">ราคาขาย / ชิ้น</span><span className="mv num">{THB(s)}</span></div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* === COMPARE RESULT (reverse) === */
+function CompareRevResult({results}) {
+  const best = results[0];
+  const worst = results[results.length-1];
+  if (results.length === 0) {
+    return (
+      <div className="cmp-result">
+        <div className="cmp-kicker">ต้นทุนจีน — เปรียบเทียบคู่แข่ง</div>
+        <div className="cmp-empty">กรอกราคาขายคู่แข่งด้านบน<br/>จะเรียงต้นทุนจีนจากต่ำสุด</div>
+      </div>
+    );
+  }
+  return (
+    <div className="cmp-result">
+      <div className="cmp-kicker">ราคาจีนโดยประมาณ — เรียงจากต่ำสุด</div>
+      <div className="cmp-table">
+        {results.map(r => {
+          const diffPct = r.isBest ? 0 : ((r.cny - best.cny)/best.cny)*100;
+          return (
+            <div key={r.compId} className={`cmp-item${r.isBest?' best':''}`}>
+              <div className="cmp-rank">{r.rank}</div>
+              <div className="cmp-name">{r.name}</div>
+              <div className="cmp-vals">
+                <span className="cmp-unit num">≈ {CNY(r.cny)}<span style={{fontSize:'12px',fontWeight:400,color:'var(--text-3)'}}>/ชิ้น</span></span>
+                {r.isBest
+                  ? <span className="cmp-diff">ต่ำสุด ✓</span>
+                  : <span className="cmp-diff num">+{fmt(diffPct,1)}%</span>
+                }
+                <span className="cmp-sub num">ขาย {THB(r.unitSell)}/ชิ้น</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      {results.length >= 2 && (
+        <div className="cmp-note">
+          <b style={{fontWeight:500,color:'var(--text)'}}>{best.name}</b> ซื้อจีนถูกที่สุดราว <span className="num" style={{color:'var(--pos)',fontWeight:500}}>{CNY(best.cny)}/ชิ้น</span>
+          {' '}— เทียบต้นทุนเราเพื่อดูว่าแข่งได้ไหม
         </div>
       )}
     </div>
@@ -592,23 +651,23 @@ function CompareResult({results, qty}) {
 /* === PRODUCT LIST === */
 function ProductCard({p, onLoad, onDelete}) {
   const isRev = p.mode==='rev';
-  const isCmp = p.mode==='cmp';
   const d = new Date(p.savedAt);
   const ds = `${d.getDate()}/${d.getMonth()+1}/${String(d.getFullYear()).slice(-2)}`;
-  const preview = isCmp
-    ? (p.preview?.perUnit > 0 ? `${p.preview.bestName||'ถูกสุด'} · ${THB(p.preview.perUnit)}/ชิ้น` : '—')
-    : isRev
-      ? (p.preview?.cny > 0 ? `≈ ${CNY(p.preview.cny)}/ชิ้น` : '—')
-      : (p.preview?.perUnit > 0 ? `${THB(p.preview.perUnit)}/ชิ้น` : '—');
-  const tag = isCmp
-    ? `เปรียบ ${p.preview?.count||0} ร้าน`
-    : isRev ? 'คู่แข่ง' : `นำเข้า${p.inputs?.isPack?' · แพค':''}`;
+  const preview = isRev
+    ? (p.preview?.cny > 0 ? `≈ ${CNY(p.preview.cny)}/ชิ้น` : '—')
+    : (p.preview?.perUnit > 0 ? `${THB(p.preview.perUnit)}/ชิ้น` : '—');
+  const count = isRev
+    ? (p.inputs?.competitors?.length || 0)
+    : (p.inputs?.suppliers?.length || 0);
+  const tag = isRev
+    ? (count > 1 ? `${count} คู่แข่ง` : 'คู่แข่ง')
+    : (count > 1 ? `${count} ร้าน` : 'นำเข้า');
   return (
     <div className="pcard">
       <div className="pcard-body" onClick={onLoad}>
         <div className="pcard-name">{p.name}</div>
         <div className="pcard-meta">
-          <span className={`pcard-tag${isRev?' rev':''}${isCmp?' cmp':''}`}>{tag}</span>
+          <span className={`pcard-tag${isRev?' rev':''}`}>{tag}</span>
           <span className="pcard-val">{preview}</span>
           <span>{ds}</span>
         </div>
@@ -639,72 +698,59 @@ const demoFees = () => ([
   {id:uid(), name:'ค่าขนส่ง', amount:'300', type:'fixed'},
   {id:uid(), name:'ภาษีนำเข้า', amount:'5', type:'percent'},
 ]);
+const newSupplier = () => ({id:uid(), name:'', unitType:'unit', unitCny:'', packCny:'', packUnits:'100', link:'', contact:''});
+const newCompetitor = () => ({id:uid(), name:'', packPrice:'', packQty:'100', compMargin:'', link:'', contact:''});
 const demoSuppliers = () => ([
-  {id:uid(), name:'ร้าน A', unitType:'unit',  unitCny:'4.50', packCny:'',   packUnits:'100'},
-  {id:uid(), name:'ร้าน B', unitType:'pack',  unitCny:'',    packCny:'350', packUnits:'100'},
-  {id:uid(), name:'ร้าน C', unitType:'pack',  unitCny:'',    packCny:'2800',packUnits:'1000'},
+  {id:uid(), name:'ร้าน A', unitType:'unit',  unitCny:'4.50', packCny:'',    packUnits:'100',  link:'', contact:''},
+  {id:uid(), name:'ร้าน B', unitType:'pack',  unitCny:'',     packCny:'350', packUnits:'100',  link:'', contact:''},
+  {id:uid(), name:'ร้าน C', unitType:'pack',  unitCny:'',     packCny:'2800',packUnits:'1000', link:'', contact:''},
+]);
+const demoCompetitors = () => ([
+  {id:uid(), name:'คู่แข่ง A', packPrice:'32000', packQty:'100', compMargin:'30', link:'', contact:''},
+  {id:uid(), name:'คู่แข่ง B', packPrice:'28000', packQty:'100', compMargin:'25', link:'', contact:''},
 ]);
 
 /* === MAIN === */
 function Main() {
   const {rate, info, refresh} = useExchangeRate();
   const [screen, setScreen] = useState('calc');
-
-  /* product records */
   const [products, setProducts] = useState(() => loadLS('cp_products', []));
   const [productName, setProductName] = useState('');
   const [productId, setProductId] = useState(null);
   const [savedFlash, setSavedFlash] = useState(false);
   const nameRef = useRef(null);
 
-  /* calculator state */
   const [mode, setMode] = useState('fwd');
   const [fees, setFees] = useState(demoFees);
-  /* forward — unit */
-  const [cny, setCny] = useState('45');
-  const [qty, setQty] = useState('100');
-  const [sell, setSell] = useState('320');
-  /* forward — pack */
-  const [isPack, setIsPack] = useState(false);
-  const [packCny, setPackCny] = useState('45');
-  const [packUnits, setPackUnits] = useState('100');
-  const [numPacks, setNumPacks] = useState('1');
-  /* reverse */
-  const [packPrice, setPackPrice] = useState('32000');
-  const [packQty, setPackQty] = useState('100');
-  const [compMargin, setCompMargin] = useState('30');
-  /* compare */
+  /* forward */
   const [suppliers, setSuppliers] = useState(demoSuppliers);
-  const [cmpQty, setCmpQty] = useState('100');
+  const [qty, setQty] = useState('100');
+  const [sell, setSell] = useState('');
+  /* reverse */
+  const [competitors, setCompetitors] = useState(demoCompetitors);
 
   /* derived */
-  const unitCny = isPack ? (parseFloat(packCny)||0)/(parseFloat(packUnits)||1) : parseFloat(cny)||0;
-  const totalQty = isPack ? (parseFloat(numPacks)||0)*(parseFloat(packUnits)||1) : parseFloat(qty)||0;
-  const r = computeForward(unitCny, totalQty, rate, fees, sell);
-  const comp = computeCompetitor(parseFloat(packPrice)||0, parseFloat(packQty)||0, parseFloat(compMargin)||0, rate, fees);
-  const cmpResults = computeAllSuppliers(suppliers, cmpQty, rate, fees);
+  const cmpResults = computeAllSuppliers(suppliers, qty, rate, fees);
+  const revResults = computeAllCompetitors(competitors, rate, fees);
+  const rankById = Object.fromEntries(cmpResults.map(r => [r.supplierId, r.rank]));
+  const revRankById = Object.fromEntries(revResults.map(r => [r.compId, r.rank]));
 
   const updFee = (id,nf) => setFees(fees.map(f=>f.id===id?nf:f));
   const delFee = (id) => setFees(fees.filter(f=>f.id!==id));
   const addFee = () => setFees([...fees, {id:uid(),name:'',amount:'',type:'fixed'}]);
 
-  const addSupplier = () => setSuppliers(prev => [...prev, {id:uid(),name:'',unitType:'unit',unitCny:'',packCny:'',packUnits:'100'}]);
-  const updSupplier = (id,ns) => setSuppliers(prev => prev.map(s => s.id===id?ns:s));
-  const delSupplier = (id) => setSuppliers(prev => prev.filter(s => s.id!==id));
-
   const saveProduct = () => {
     const name = productName.trim();
     if (!name) { nameRef.current?.focus(); nameRef.current?.select(); return; }
     const id = productId || String(uid());
-    const preview = mode==='cmp'
-      ? {bestName:cmpResults[0]?.name||'', perUnit:cmpResults[0]?.perUnit||0, count:suppliers.length}
-      : mode==='rev'
-        ? {cny:comp.cny, goodsThb:comp.goodsThb}
-        : {perUnit:r.perUnit, total:r.total};
+    const preview = mode==='rev'
+      ? {cny:revResults[0]?.cny||0, goodsThb:revResults[0]?.goodsThb||0}
+      : {perUnit:cmpResults[0]?.perUnit||0, total:cmpResults[0]?.total||0};
     const record = {
       id, name, mode,
-      inputs: {cny, qty, sell, packPrice, packQty, compMargin, isPack, packCny, packUnits, numPacks,
-               suppliers:suppliers.map(s=>({...s})), cmpQty},
+      inputs: mode==='rev'
+        ? {competitors:competitors.map(c=>({...c}))}
+        : {suppliers:suppliers.map(s=>({...s})), qty, sell},
       fees: fees.map(f=>({...f})),
       preview,
       savedAt: Date.now(),
@@ -715,16 +761,31 @@ function Main() {
   };
 
   const loadProduct = (p) => {
-    setProductName(p.name); setProductId(p.id); setMode(p.mode);
-    setFees(p.fees.map(f=>({...f, id:uid()})));
-    const i = p.inputs;
-    setCny(i.cny||'0'); setQty(i.qty||'0'); setSell(i.sell||'');
-    setPackPrice(i.packPrice||'0'); setPackQty(i.packQty||'0'); setCompMargin(i.compMargin||'0');
-    setIsPack(i.isPack||false); setPackCny(i.packCny||'0'); setPackUnits(i.packUnits||'100'); setNumPacks(i.numPacks||'1');
-    setSuppliers(Array.isArray(i.suppliers) && i.suppliers.length > 0
-      ? i.suppliers.map(s=>({...s, id:uid()}))
-      : demoSuppliers());
-    setCmpQty(i.cmpQty||'100');
+    setProductName(p.name); setProductId(p.id);
+    const m = p.mode==='cmp'?'fwd':p.mode;
+    setMode(m);
+    setFees(p.fees.map(f=>({...f,id:uid()})));
+    if (m==='rev') {
+      if (Array.isArray(p.inputs.competitors) && p.inputs.competitors.length > 0) {
+        setCompetitors(p.inputs.competitors.map(c=>({...c,id:uid()})));
+      } else if (p.inputs.packPrice) {
+        /* migrate old single-competitor format */
+        setCompetitors([{id:uid(), name:'คู่แข่ง', packPrice:p.inputs.packPrice||'0', packQty:p.inputs.packQty||'100', compMargin:p.inputs.compMargin||'0', link:'', contact:''}]);
+      } else {
+        setCompetitors(demoCompetitors());
+      }
+    } else {
+      if (Array.isArray(p.inputs.suppliers) && p.inputs.suppliers.length > 0) {
+        setSuppliers(p.inputs.suppliers.map(s=>({...s,id:uid()})));
+      } else if (p.inputs.cny) {
+        /* migrate old single-supplier format */
+        setSuppliers([{id:uid(), name:'ร้านค้า', unitType:p.inputs.isPack?'pack':'unit', unitCny:p.inputs.cny||'0', packCny:p.inputs.packCny||'', packUnits:p.inputs.packUnits||'100', link:'', contact:''}]);
+      } else {
+        setSuppliers(demoSuppliers());
+      }
+      setQty(p.inputs.qty||p.inputs.cmpQty||'100');
+      setSell(p.inputs.sell||'');
+    }
     setScreen('calc');
   };
 
@@ -736,16 +797,11 @@ function Main() {
 
   const newProduct = () => {
     setProductName(''); setProductId(null); setMode('fwd');
-    setFees(demoFees()); setCny('45'); setQty('100'); setSell('320');
-    setPackPrice('32000'); setPackQty('100'); setCompMargin('30');
-    setIsPack(false); setPackCny('45'); setPackUnits('100'); setNumPacks('1');
-    setSuppliers(demoSuppliers()); setCmpQty('100');
+    setFees(demoFees()); setSuppliers(demoSuppliers()); setQty('100'); setSell('');
+    setCompetitors(demoCompetitors());
   };
 
   if (screen==='list') return <ProductList products={products} onLoad={loadProduct} onDelete={deleteProduct} onBack={()=>setScreen('calc')} />;
-
-  /* rank lookup for SupplierRow highlight */
-  const rankById = Object.fromEntries(cmpResults.map(r => [r.supplierId, r.rank]));
 
   return (
     <div className="app">
@@ -768,91 +824,49 @@ function Main() {
       <ModeToggle mode={mode} onMode={setMode} />
 
       {mode==='fwd' ? (
-        <div className="card">
-          <div className="card-label">
-            ราคาต้นทุนจากจีน
-            <div className="mode-chips" style={{marginLeft:'auto'}}>
-              <button className={!isPack?'active':''} onClick={()=>setIsPack(false)}>ต่อชิ้น</button>
-              <button className={isPack?'active':''} onClick={()=>setIsPack(true)}>ยกแพค</button>
-            </div>
-          </div>
-          {!isPack ? (
-            <div className="price-grid">
-              <div className="field"><span className="fl">ราคา / ชิ้น (CNY)</span><NumInput value={cny} onChange={setCny} prefix="¥" /></div>
-              <div className="field"><span className="fl">จำนวน</span><NumInput value={qty} onChange={setQty} suffix="ชิ้น" /></div>
-            </div>
-          ) : (
-            <>
-              <div className="price-grid">
-                <div className="field"><span className="fl">ราคา / แพค (CNY)</span><NumInput value={packCny} onChange={setPackCny} prefix="¥" /></div>
-                <div className="field"><span className="fl">ชิ้น / แพค</span><NumInput value={packUnits} onChange={setPackUnits} suffix="ชิ้น" /></div>
-              </div>
-              <div className="price-grid" style={{marginTop:'10px'}}>
-                <div className="field">
-                  <span className="fl">ราคา / ชิ้น <span className="autofill-chip">← อัตโนมัติ</span></span>
-                  <div className="inputwrap autofill">
-                    <span className="pfx">¥</span>
-                    <input className="num" value={fmt(unitCny,4).replace(/,/g,'')} readOnly />
-                    <span className="sfx" style={{fontSize:'10px',color:'var(--accent)'}}>{packCny||'0'}÷{packUnits||'1'}</span>
-                  </div>
-                </div>
-                <div className="field"><span className="fl">จำนวนแพค</span><NumInput value={numPacks} onChange={setNumPacks} suffix="แพค" /></div>
-              </div>
-              <div style={{marginTop:'8px',display:'flex',alignItems:'center',justifyContent:'flex-end',gap:'5px',fontSize:'12px',color:'var(--text-3)'}}>
-                รวม <b className="num" style={{color:'var(--text)',fontWeight:500}}>{INT(totalQty)}</b> ชิ้น
-              </div>
-            </>
-          )}
-        </div>
-      ) : mode==='rev' ? (
-        <div className="card">
-          <div className="card-label">ราคาขายคู่แข่งในไทย</div>
-          <div className="price-grid">
-            <div className="field"><span className="fl">ราคาขาย / ลัง (THB)</span><NumInput value={packPrice} onChange={setPackPrice} prefix="฿" /></div>
-            <div className="field"><span className="fl">บรรจุ / ลัง (ชิ้น)</span><NumInput value={packQty} onChange={setPackQty} suffix="ชิ้น" /></div>
-          </div>
-          <div className="derived">
-            <span>= ราคาขาย <b className="num">{THB(comp.unitSell)}</b>/ชิ้น</span>
-            {comp.marginPct>0 && <span>· หลังหักกำไร <b className="num">{THB(comp.unitCost)}</b></span>}
-          </div>
-          <div className="divider-soft"></div>
-          <div className="field">
-            <span className="fl">กำไรคู่แข่งโดยประมาณ — ใส่เพื่อถอดต้นทุน (ไม่บังคับ)</span>
-            <NumInput value={compMargin} onChange={setCompMargin} suffix="% กำไร" />
-          </div>
-        </div>
-      ) : (
         <>
           {/* shared qty */}
-          <div className="cmp-qty-card">
-            <span className="cmp-qty-label">จำนวนที่ซื้อ</span>
-            <div className="cmp-qty-input">
-              <input inputMode="decimal" value={cmpQty} placeholder="100"
-                onChange={e=>setCmpQty(e.target.value.replace(/[^0-9.]/g,''))} />
+          <div className="qty-bar">
+            <span className="qty-bar-label">จำนวนที่ซื้อ</span>
+            <div className="qty-bar-input">
+              <input inputMode="decimal" value={qty} placeholder="100"
+                onChange={e=>setQty(e.target.value.replace(/[^0-9.]/g,''))} />
               <span className="qs">ชิ้น</span>
             </div>
           </div>
           {/* supplier rows */}
           {suppliers.map(s => (
             <SupplierRow key={s.id} s={s}
-              cmpRank={rankById[s.id] || 0}
-              onChange={ns => updSupplier(s.id, ns)}
-              onDelete={() => delSupplier(s.id)}
+              cmpRank={rankById[s.id]||0}
+              onChange={ns=>setSuppliers(prev=>prev.map(x=>x.id===s.id?ns:x))}
+              onDelete={()=>setSuppliers(prev=>prev.filter(x=>x.id!==s.id))}
             />
           ))}
-          <button className="addsup" onClick={addSupplier}><IconPlus /> เพิ่มร้านค้า</button>
+          <button className="addrow-btn" onClick={()=>setSuppliers(prev=>[...prev,newSupplier()])}><IconPlus /> เพิ่มร้านค้า</button>
+        </>
+      ) : (
+        <>
+          {/* competitor rows */}
+          {competitors.map(c => (
+            <CompetitorRow key={c.id} c={c}
+              cmpRank={revRankById[c.id]||0}
+              onChange={nc=>setCompetitors(prev=>prev.map(x=>x.id===c.id?nc:x))}
+              onDelete={()=>setCompetitors(prev=>prev.filter(x=>x.id!==c.id))}
+            />
+          ))}
+          <button className="addrow-btn" onClick={()=>setCompetitors(prev=>[...prev,newCompetitor()])}><IconPlus /> เพิ่มร้าน / คู่แข่ง</button>
         </>
       )}
 
       <div className="fees-head">
         <span className="ft">ค่าธรรมเนียม &amp; ภาษี</span>
-        <span className="fc num">{fees.length} รายการ{mode==='cmp'?' · ใช้ร่วมกันทุกร้าน':''}</span>
+        <span className="fc num">{fees.length} รายการ · ใช้ร่วมกันทุกร้าน</span>
       </div>
       {fees.map(f => <FeeRow key={f.id} fee={f} onChange={(nf)=>updFee(f.id,nf)} onDelete={()=>delFee(f.id)} />)}
       <button className="addfee" onClick={addFee}><IconPlus /> เพิ่มค่าธรรมเนียม</button>
 
       {mode==='fwd' && (
-        <div className="card sellrow">
+        <div className="card" style={{marginTop:'14px'}}>
           <div className="field">
             <span className="fl">ราคาขายในไทย / ชิ้น — ใส่เพื่อดูกำไร (ไม่บังคับ)</span>
             <NumInput value={sell} onChange={setSell} prefix="฿" suffix="THB" />
@@ -860,11 +874,9 @@ function Main() {
         </div>
       )}
 
-      {mode==='cmp'
-        ? <CompareResult results={cmpResults} qty={cmpQty} />
-        : mode==='fwd'
-          ? <ResultFwd r={r} />
-          : <ResultRev c={comp} rate={rate} />
+      {mode==='fwd'
+        ? <CompareResult results={cmpResults} qty={qty} sell={sell} fees={fees} rate={rate} />
+        : <CompareRevResult results={revResults} />
       }
 
       <div className="hint">ตัวเลขอัปเดตอัตโนมัติเมื่อพิมพ์ · อัตราแลกเปลี่ยนอัปเดตทุก 10 นาที</div>
@@ -872,7 +884,6 @@ function Main() {
   );
 }
 
-/* === APP ROOT === */
 function App() {
   const { authed, login } = useAuth();
   if (!authed) return <LoginScreen onLogin={login} />;
@@ -880,7 +891,6 @@ function App() {
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(()=>{}));
 }
