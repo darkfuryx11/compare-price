@@ -912,9 +912,17 @@ function ProductList({products, onLoad, onDelete, onBack}) {
 }
 
 /* === DEFAULTS === */
+const getTiktokCommissionPct = () => {
+  try { return parseFloat(localStorage.getItem('ss_tiktok_commission_pct')) || 20; } catch(e) { return 20; }
+};
 const demoFees = () => ([
-  {id:uid(), name:'ค่าขนส่ง', amount:'300', type:'fixed'},
-  {id:uid(), name:'ภาษีนำเข้า', amount:'5', type:'percent'},
+  {id:uid(), name:'ค่าโอนต่างประเทศ',   amount:'2',                              type:'fixed'},
+  {id:uid(), name:'ค่านำเข้า',          amount:'20',                             type:'percent'},
+  {id:uid(), name:'คนขนส่งในประเทศ',    amount:'0',                              type:'fixed'},
+  {id:uid(), name:'ค่าขนส่งต่างประเทศ', amount:'0',                              type:'fixed'},
+  {id:uid(), name:'ค่าพนักงาน',         amount:'5',                              type:'percent'},
+  {id:uid(), name:'ค่าคอมแพลตฟอร์ม',   amount:String(getTiktokCommissionPct()), type:'percent'},
+  {id:uid(), name:'ค่า Ads',            amount:'5',                              type:'percent'},
 ]);
 const newSupplier = () => ({id:uid(), name:'', unitType:'unit', unitCny:'', packCny:'', packUnits:'100', link:'', contact:'', image_url:''});
 const newCompetitor = () => ({id:uid(), name:'', packPrice:'', packQty:'100', compMargin:'', link:'', contact:'', image_url:''});
