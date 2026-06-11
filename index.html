@@ -91,9 +91,9 @@ body{
 .ratebar .rb-delta{font-size:11.5px;font-weight:500;}
 .ratebar .rb-time{font-size:10.5px;color:var(--text-3);white-space:nowrap;}
 
-/* mode toggle */
+/* mode toggle — 3-button friendly */
 .modetoggle{display:flex;background:var(--bg-inset);border:0.5px solid var(--border);border-radius:var(--r-md);padding:3px;margin-bottom:16px;gap:3px;}
-.modetoggle button{flex:1;min-height:44px;border:none;background:transparent;border-radius:9px;cursor:pointer;font-family:inherit;font-size:13.5px;color:var(--text-2);font-weight:400;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .15s,color .15s;-webkit-appearance:none;appearance:none;}
+.modetoggle button{flex:1;min-height:42px;border:none;background:transparent;border-radius:9px;cursor:pointer;font-family:inherit;font-size:12px;color:var(--text-2);font-weight:400;display:flex;align-items:center;justify-content:center;gap:5px;transition:background .15s,color .15s;-webkit-appearance:none;appearance:none;padding:0 4px;text-align:center;line-height:1.3;}
 .modetoggle button.active{background:var(--bg-card);color:var(--text);font-weight:500;border:0.5px solid var(--border);}
 .modetoggle button .arr{color:var(--text-3);}
 .modetoggle button.active .arr{color:var(--accent);}
@@ -103,7 +103,7 @@ body{
 .mode-chips button{padding:3px 9px;border:none;border-radius:5px;font-family:inherit;font-size:11px;font-weight:500;color:var(--text-3);background:transparent;cursor:pointer;min-height:26px;-webkit-appearance:none;appearance:none;}
 .mode-chips button.active{background:var(--bg-card);color:var(--text);border:0.5px solid var(--border);}
 
-/* pack derived */
+/* pack derived / autofill */
 .pack-derived{font-size:12.5px;color:var(--text-2);margin-top:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
 .pack-derived b{font-weight:500;color:var(--accent);}
 .pack-formula{font-size:11.5px;color:var(--text-3);}
@@ -188,9 +188,58 @@ body{
 .pcard-meta{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-3);flex-wrap:wrap;}
 .pcard-tag{font-size:10.5px;font-weight:500;padding:2px 7px;border-radius:5px;background:var(--accent-soft);color:var(--accent);}
 .pcard-tag.rev{background:var(--bg-inset);color:var(--text-3);}
+.pcard-tag.cmp{background:rgba(99,102,241,0.12);color:#5b5fd4;}
 .pcard-val{font-variant-numeric:tabular-nums;}
 .list-empty{text-align:center;padding:48px 20px;color:var(--text-3);font-size:13.5px;line-height:1.7;}
 .list-empty .le-icon{font-size:36px;margin-bottom:12px;opacity:.4;}
+
+/* supplier compare — input rows */
+.sup-row{display:flex;align-items:flex-start;gap:8px;background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--r-md);padding:12px 8px 12px 14px;margin-bottom:10px;transition:border-color .15s,background .15s;}
+.sup-row.best{border-color:var(--accent);background:var(--accent-soft);}
+.sup-col{display:flex;flex-direction:column;gap:7px;flex:1;min-width:0;}
+.sup-name-row{display:flex;align-items:center;gap:8px;}
+.sup-rank{width:22px;height:22px;border-radius:50%;background:var(--bg-inset);border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--text-3);flex:none;}
+.sup-row.best .sup-rank{background:var(--accent);color:#fff;border-color:transparent;}
+.sup-name-input{flex:1;border:none;background:transparent;outline:none;font-family:inherit;font-size:14px;font-weight:500;color:var(--text);padding:3px 0;}
+.sup-name-input::placeholder{color:var(--text-3);font-weight:400;}
+.sup-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.sup-field{display:flex;flex-direction:column;gap:4px;}
+.sup-field .sf-label{font-size:10.5px;color:var(--text-3);}
+.sup-inputwrap{display:flex;align-items:center;gap:5px;background:var(--bg-inset);border:0.5px solid var(--border);border-radius:8px;padding:0 10px;min-height:44px;transition:border-color .15s;}
+.sup-inputwrap:focus-within{border-color:var(--accent);background:var(--bg-card);}
+.sup-row.best .sup-inputwrap{background:rgba(255,255,255,0.65);}
+.sup-row.best .sup-inputwrap:focus-within{background:#fff;}
+.sup-inputwrap .sp{font-size:14px;color:var(--text-3);font-weight:500;flex:none;}
+.sup-inputwrap input{border:none;background:transparent;outline:none;font-family:inherit;font-size:16px;font-weight:500;color:var(--text);width:100%;min-width:0;padding:0;font-variant-numeric:tabular-nums;}
+.sup-inputwrap input::placeholder{color:var(--text-3);font-weight:400;}
+.sup-derived{font-size:11.5px;color:var(--accent);font-weight:500;}
+.addsup{width:100%;min-height:44px;border:0.5px dashed var(--border-strong);background:transparent;border-radius:var(--r-md);color:var(--text-2);font-family:inherit;font-size:13.5px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:2px;-webkit-appearance:none;appearance:none;transition:border-color .15s,color .15s;}
+.addsup:active{border-color:var(--accent);color:var(--accent);}
+.cmp-qty-card{background:var(--bg-card);border:0.5px solid var(--border);border-radius:var(--r-md);padding:12px 14px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.cmp-qty-label{font-size:12px;color:var(--text-2);font-weight:500;flex:none;}
+.cmp-qty-input{display:flex;align-items:center;gap:6px;background:var(--bg-inset);border:0.5px solid var(--border);border-radius:8px;padding:0 12px;min-height:42px;flex:1;transition:border-color .15s;}
+.cmp-qty-input:focus-within{border-color:var(--accent);}
+.cmp-qty-input input{border:none;background:transparent;outline:none;font-family:inherit;font-size:17px;font-weight:500;color:var(--text);width:100%;padding:0;font-variant-numeric:tabular-nums;}
+.cmp-qty-input .qs{font-size:12px;color:var(--text-3);}
+
+/* compare result */
+.cmp-result{background:var(--bg-secondary);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:18px 17px;margin-top:16px;}
+.cmp-kicker{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2);font-weight:500;margin-bottom:14px;display:flex;align-items:center;gap:7px;}
+.cmp-table{display:flex;flex-direction:column;gap:6px;}
+.cmp-item{display:flex;align-items:center;gap:11px;padding:12px 13px;border-radius:var(--r-md);background:var(--bg-card);border:0.5px solid var(--border);}
+.cmp-item.best{background:var(--pos-bg);border-color:var(--pos);}
+.cmp-rank{width:24px;height:24px;border-radius:50%;background:var(--bg-inset);border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--text-3);flex:none;}
+.cmp-item.best .cmp-rank{background:var(--pos);color:#fff;border-color:transparent;}
+.cmp-name{flex:1;min-width:0;font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cmp-item.best .cmp-name{color:var(--pos);}
+.cmp-vals{display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex:none;}
+.cmp-unit{font-size:17px;font-weight:500;letter-spacing:-0.01em;font-variant-numeric:tabular-nums;}
+.cmp-item.best .cmp-unit{color:var(--pos);}
+.cmp-sub{font-size:11px;color:var(--text-3);font-variant-numeric:tabular-nums;}
+.cmp-diff{font-size:11.5px;font-weight:500;font-variant-numeric:tabular-nums;color:var(--neg);}
+.cmp-item.best .cmp-diff{color:var(--pos);font-size:11px;}
+.cmp-note{margin-top:13px;padding-top:13px;border-top:0.5px solid var(--border);font-size:12.5px;color:var(--text-2);line-height:1.6;}
+.cmp-empty{text-align:center;padding:28px 16px;color:var(--text-3);font-size:13px;line-height:1.7;}
 
 /* login */
 .login-wrap{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px 20px;background:var(--bg-app);}
@@ -261,10 +310,10 @@ const IconPlus = () => <svg width="15" height="15" viewBox="0 0 16 16" fill="non
 const IconX = () => <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/></svg>;
 const IconUp = () => <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 11V3M3.5 6.5L7 3l3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
 const IconDown = () => <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 3v8M3.5 7.5L7 11l3.5-3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
-const IconRefresh = () => <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M3 10a7 7 0 0 1 13-3.5M17 10a7 7 0 0 1-13 3.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/><path d="M16 3v4h-4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/><path d="M4 17v-4h4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>;
 const IconList = () => <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4 6h12M4 10h12M4 14h12" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/></svg>;
 const IconSave = () => <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M5 3h10a2 2 0 0 1 2 2v12a1 1 0 0 1-1.55.83L10 15.2l-5.45 2.63A1 1 0 0 1 3 17V5a2 2 0 0 1 2-2z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/></svg>;
 const IconBack = () => <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M13 4L6 10l7 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+const IconScales = () => <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M10 3v14M6 17h8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/><path d="M4 7l3 5M16 7l-3 5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/><circle cx="4" cy="7" r="1.8" fill="currentColor"/><circle cx="16" cy="7" r="1.8" fill="currentColor"/></svg>;
 
 /* === CALC ENGINE === */
 function computeForward(cny, qty, rate, fees, sell) {
@@ -292,6 +341,20 @@ function computeCompetitor(packPrice, packQty, marginPct, rate, fees) {
   const goodsThb=(unitCost-fixedPerUnit)/(1+pctRate/100);
   const cny=rate?goodsThb/rate:0;
   return {unitSell,unitCost,fixedPerUnit,pctRate,goodsThb,cny,packPrice,packQty,marginPct:m,valid:goodsThb>0};
+}
+function computeAllSuppliers(suppliers, qty, rate, fees) {
+  const q = parseFloat(qty) || 1;
+  const results = suppliers.map(s => {
+    const uc = s.unitType==='pack'
+      ? (parseFloat(s.packCny)||0) / (parseFloat(s.packUnits)||1)
+      : (parseFloat(s.unitCny)||0);
+    if (uc <= 0) return null;
+    const r = computeForward(uc, q, rate, fees, '');
+    return { supplierId:s.id, name:s.name||'ร้านไม่มีชื่อ', effectiveUnitCny:uc, perUnit:r.perUnit, total:r.total, qty:q, rank:0, isBest:false };
+  }).filter(Boolean);
+  results.sort((a,b) => a.perUnit - b.perUnit);
+  results.forEach((r,i) => { r.rank=i+1; r.isBest=i===0; });
+  return results;
 }
 
 /* === EXCHANGE RATE HOOK === */
@@ -335,8 +398,9 @@ function RateBar({rate,info,onRefresh}) {
 function ModeToggle({mode,onMode}) {
   return (
     <div className="modetoggle" role="tablist">
-      <button className={mode==='fwd'?'active':''} onClick={()=>onMode('fwd')} role="tab">ราคาจีน <span className="arr">→</span> ไทย</button>
-      <button className={mode==='rev'?'active':''} onClick={()=>onMode('rev')} role="tab">ราคาไทย <span className="arr">→</span> จีน</button>
+      <button className={mode==='fwd'?'active':''} onClick={()=>onMode('fwd')} role="tab">จีน <span className="arr">→</span> ไทย</button>
+      <button className={mode==='rev'?'active':''} onClick={()=>onMode('rev')} role="tab">ไทย <span className="arr">→</span> จีน</button>
+      <button className={mode==='cmp'?'active':''} onClick={()=>onMode('cmp')} role="tab"><IconScales /> เปรียบเทียบ</button>
     </div>
   );
 }
@@ -417,20 +481,134 @@ function ResultRev({c,rate}) {
   );
 }
 
+/* === SUPPLIER ROW (compare mode) === */
+function SupplierRow({s, cmpRank, onChange, onDelete}) {
+  const isPack = s.unitType === 'pack';
+  const uc = isPack ? (parseFloat(s.packCny)||0)/(parseFloat(s.packUnits)||1) : 0;
+  const isBest = cmpRank === 1;
+  return (
+    <div className={`sup-row${isBest?' best':''}`}>
+      <div className="sup-col">
+        <div className="sup-name-row">
+          {cmpRank > 0 && <div className="sup-rank">{cmpRank}</div>}
+          <input className="sup-name-input" value={s.name} placeholder="ชื่อร้านค้า"
+            onChange={e => onChange({...s, name:e.target.value})} />
+        </div>
+        <div className="mode-chips" style={{alignSelf:'flex-start'}}>
+          <button className={!isPack?'active':''} onClick={()=>onChange({...s,unitType:'unit'})}>ต่อชิ้น</button>
+          <button className={isPack?'active':''} onClick={()=>onChange({...s,unitType:'pack'})}>ยกแพค</button>
+        </div>
+        {!isPack ? (
+          <div className="sup-fields">
+            <div className="sup-field">
+              <span className="sf-label">ราคา / ชิ้น (CNY)</span>
+              <div className="sup-inputwrap">
+                <span className="sp">¥</span>
+                <input inputMode="decimal" value={s.unitCny} placeholder="0"
+                  onChange={e => onChange({...s, unitCny:e.target.value.replace(/[^0-9.]/g,'')})} />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="sup-fields">
+              <div className="sup-field">
+                <span className="sf-label">ราคา / แพค (CNY)</span>
+                <div className="sup-inputwrap">
+                  <span className="sp">¥</span>
+                  <input inputMode="decimal" value={s.packCny} placeholder="0"
+                    onChange={e => onChange({...s, packCny:e.target.value.replace(/[^0-9.]/g,'')})} />
+                </div>
+              </div>
+              <div className="sup-field">
+                <span className="sf-label">ชิ้น / แพค</span>
+                <div className="sup-inputwrap">
+                  <input inputMode="decimal" value={s.packUnits} placeholder="100"
+                    onChange={e => onChange({...s, packUnits:e.target.value.replace(/[^0-9.]/g,'')})} />
+                  <span className="sp">ชิ้น</span>
+                </div>
+              </div>
+            </div>
+            {uc > 0 && (
+              <div className="sup-derived">
+                = {CNY(uc, 4)}/ชิ้น ({s.packCny||'0'} ÷ {s.packUnits||'1'})
+              </div>
+            )}
+          </>
+        )}
+      </div>
+      <button className="delbtn" onClick={onDelete} aria-label="ลบ"><IconX /></button>
+    </div>
+  );
+}
+
+/* === COMPARE RESULT === */
+function CompareResult({results, qty}) {
+  const q = parseFloat(qty) || 1;
+  if (results.length === 0) {
+    return (
+      <div className="cmp-result">
+        <div className="cmp-kicker"><IconScales /> เปรียบเทียบต้นทุนถึงไทย</div>
+        <div className="cmp-empty">กรอกราคาแต่ละร้านด้านบน<br/>จะเรียงจากถูกสุดอัตโนมัติ</div>
+      </div>
+    );
+  }
+  const best = results[0];
+  const worst = results[results.length - 1];
+  return (
+    <div className="cmp-result">
+      <div className="cmp-kicker"><IconScales /> เปรียบเทียบต้นทุนถึงไทย · {INT(q)} ชิ้น</div>
+      <div className="cmp-table">
+        {results.map(r => {
+          const diffPct = r.isBest ? 0 : ((r.perUnit - best.perUnit) / best.perUnit) * 100;
+          const diffBaht = r.perUnit - best.perUnit;
+          return (
+            <div key={r.supplierId} className={`cmp-item${r.isBest?' best':''}`}>
+              <div className="cmp-rank">{r.rank}</div>
+              <div className="cmp-name">{r.name}</div>
+              <div className="cmp-vals">
+                <span className="cmp-unit num">{THB(r.perUnit)}<span style={{fontSize:'12px',fontWeight:400,color:'var(--text-3)'}}>/ชิ้น</span></span>
+                {r.isBest
+                  ? <span className="cmp-diff">ถูกสุด ✓</span>
+                  : <span className="cmp-diff num">+{fmt(diffPct,1)}% · {THB(diffBaht)}/ชิ้น</span>
+                }
+                {q > 1 && <span className="cmp-sub num">รวม {THB(r.total,0)}</span>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      {results.length >= 2 && (
+        <div className="cmp-note">
+          ซื้อจาก <b style={{fontWeight:500,color:'var(--text)'}}>{best.name}</b> ประหยัดกว่า <b style={{fontWeight:500,color:'var(--text)'}}>{worst.name}</b>{' '}
+          <span style={{color:'var(--pos)',fontWeight:500}} className="num">{THB(worst.perUnit - best.perUnit)}/ชิ้น</span>
+          {q > 1 && <span className="num"> · รวม {THB((worst.perUnit - best.perUnit) * q, 0)}</span>}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* === PRODUCT LIST === */
 function ProductCard({p, onLoad, onDelete}) {
   const isRev = p.mode==='rev';
+  const isCmp = p.mode==='cmp';
   const d = new Date(p.savedAt);
   const ds = `${d.getDate()}/${d.getMonth()+1}/${String(d.getFullYear()).slice(-2)}`;
-  const preview = isRev
-    ? (p.preview?.cny > 0 ? `≈ ${CNY(p.preview.cny)}/ชิ้น` : '—')
-    : (p.preview?.perUnit > 0 ? `${THB(p.preview.perUnit)}/ชิ้น` : '—');
+  const preview = isCmp
+    ? (p.preview?.perUnit > 0 ? `${p.preview.bestName||'ถูกสุด'} · ${THB(p.preview.perUnit)}/ชิ้น` : '—')
+    : isRev
+      ? (p.preview?.cny > 0 ? `≈ ${CNY(p.preview.cny)}/ชิ้น` : '—')
+      : (p.preview?.perUnit > 0 ? `${THB(p.preview.perUnit)}/ชิ้น` : '—');
+  const tag = isCmp
+    ? `เปรียบ ${p.preview?.count||0} ร้าน`
+    : isRev ? 'คู่แข่ง' : `นำเข้า${p.inputs?.isPack?' · แพค':''}`;
   return (
     <div className="pcard">
       <div className="pcard-body" onClick={onLoad}>
         <div className="pcard-name">{p.name}</div>
         <div className="pcard-meta">
-          <span className={`pcard-tag${isRev?' rev':''}`}>{isRev?'คู่แข่ง':'นำเข้า'}{p.inputs?.isPack?' · ยกแพค':''}</span>
+          <span className={`pcard-tag${isRev?' rev':''}${isCmp?' cmp':''}`}>{tag}</span>
           <span className="pcard-val">{preview}</span>
           <span>{ds}</span>
         </div>
@@ -456,12 +634,18 @@ function ProductList({products, onLoad, onDelete, onBack}) {
   );
 }
 
-/* === MAIN CALCULATOR === */
+/* === DEFAULTS === */
 const demoFees = () => ([
   {id:uid(), name:'ค่าขนส่ง', amount:'300', type:'fixed'},
   {id:uid(), name:'ภาษีนำเข้า', amount:'5', type:'percent'},
 ]);
+const demoSuppliers = () => ([
+  {id:uid(), name:'ร้าน A', unitType:'unit',  unitCny:'4.50', packCny:'',   packUnits:'100'},
+  {id:uid(), name:'ร้าน B', unitType:'pack',  unitCny:'',    packCny:'350', packUnits:'100'},
+  {id:uid(), name:'ร้าน C', unitType:'pack',  unitCny:'',    packCny:'2800',packUnits:'1000'},
+]);
 
+/* === MAIN === */
 function Main() {
   const {rate, info, refresh} = useExchangeRate();
   const [screen, setScreen] = useState('calc');
@@ -476,11 +660,11 @@ function Main() {
   /* calculator state */
   const [mode, setMode] = useState('fwd');
   const [fees, setFees] = useState(demoFees);
-  /* forward — unit mode */
+  /* forward — unit */
   const [cny, setCny] = useState('45');
   const [qty, setQty] = useState('100');
   const [sell, setSell] = useState('320');
-  /* forward — pack mode */
+  /* forward — pack */
   const [isPack, setIsPack] = useState(false);
   const [packCny, setPackCny] = useState('45');
   const [packUnits, setPackUnits] = useState('100');
@@ -489,25 +673,38 @@ function Main() {
   const [packPrice, setPackPrice] = useState('32000');
   const [packQty, setPackQty] = useState('100');
   const [compMargin, setCompMargin] = useState('30');
+  /* compare */
+  const [suppliers, setSuppliers] = useState(demoSuppliers);
+  const [cmpQty, setCmpQty] = useState('100');
 
   /* derived */
   const unitCny = isPack ? (parseFloat(packCny)||0)/(parseFloat(packUnits)||1) : parseFloat(cny)||0;
   const totalQty = isPack ? (parseFloat(numPacks)||0)*(parseFloat(packUnits)||1) : parseFloat(qty)||0;
   const r = computeForward(unitCny, totalQty, rate, fees, sell);
   const comp = computeCompetitor(parseFloat(packPrice)||0, parseFloat(packQty)||0, parseFloat(compMargin)||0, rate, fees);
+  const cmpResults = computeAllSuppliers(suppliers, cmpQty, rate, fees);
 
   const updFee = (id,nf) => setFees(fees.map(f=>f.id===id?nf:f));
   const delFee = (id) => setFees(fees.filter(f=>f.id!==id));
   const addFee = () => setFees([...fees, {id:uid(),name:'',amount:'',type:'fixed'}]);
 
+  const addSupplier = () => setSuppliers(prev => [...prev, {id:uid(),name:'',unitType:'unit',unitCny:'',packCny:'',packUnits:'100'}]);
+  const updSupplier = (id,ns) => setSuppliers(prev => prev.map(s => s.id===id?ns:s));
+  const delSupplier = (id) => setSuppliers(prev => prev.filter(s => s.id!==id));
+
   const saveProduct = () => {
     const name = productName.trim();
     if (!name) { nameRef.current?.focus(); nameRef.current?.select(); return; }
     const id = productId || String(uid());
-    const preview = mode==='rev' ? {cny:comp.cny, goodsThb:comp.goodsThb} : {perUnit:r.perUnit, total:r.total};
+    const preview = mode==='cmp'
+      ? {bestName:cmpResults[0]?.name||'', perUnit:cmpResults[0]?.perUnit||0, count:suppliers.length}
+      : mode==='rev'
+        ? {cny:comp.cny, goodsThb:comp.goodsThb}
+        : {perUnit:r.perUnit, total:r.total};
     const record = {
       id, name, mode,
-      inputs: {cny, qty, sell, packPrice, packQty, compMargin, isPack, packCny, packUnits, numPacks},
+      inputs: {cny, qty, sell, packPrice, packQty, compMargin, isPack, packCny, packUnits, numPacks,
+               suppliers:suppliers.map(s=>({...s})), cmpQty},
       fees: fees.map(f=>({...f})),
       preview,
       savedAt: Date.now(),
@@ -524,6 +721,10 @@ function Main() {
     setCny(i.cny||'0'); setQty(i.qty||'0'); setSell(i.sell||'');
     setPackPrice(i.packPrice||'0'); setPackQty(i.packQty||'0'); setCompMargin(i.compMargin||'0');
     setIsPack(i.isPack||false); setPackCny(i.packCny||'0'); setPackUnits(i.packUnits||'100'); setNumPacks(i.numPacks||'1');
+    setSuppliers(Array.isArray(i.suppliers) && i.suppliers.length > 0
+      ? i.suppliers.map(s=>({...s, id:uid()}))
+      : demoSuppliers());
+    setCmpQty(i.cmpQty||'100');
     setScreen('calc');
   };
 
@@ -538,20 +739,22 @@ function Main() {
     setFees(demoFees()); setCny('45'); setQty('100'); setSell('320');
     setPackPrice('32000'); setPackQty('100'); setCompMargin('30');
     setIsPack(false); setPackCny('45'); setPackUnits('100'); setNumPacks('1');
+    setSuppliers(demoSuppliers()); setCmpQty('100');
   };
 
   if (screen==='list') return <ProductList products={products} onLoad={loadProduct} onDelete={deleteProduct} onBack={()=>setScreen('calc')} />;
 
+  /* rank lookup for SupplierRow highlight */
+  const rankById = Object.fromEntries(cmpResults.map(r => [r.supplierId, r.rank]));
+
   return (
     <div className="app">
-      {/* Appbar */}
       <div className="appbar">
         <button className="iconbtn" onClick={()=>setScreen('list')} aria-label="รายการ"><IconList /></button>
         <div className="title">นำเข้าจากจีน<small>Landed-cost calculator</small></div>
         <button className={`iconbtn${productId?' accent':''}`} onClick={saveProduct} aria-label="บันทึก"><IconSave /></button>
       </div>
 
-      {/* Product name row */}
       <div className="name-row">
         <input ref={nameRef} className="name-input" value={productName}
           onChange={e=>setProductName(e.target.value)}
@@ -573,7 +776,6 @@ function Main() {
               <button className={isPack?'active':''} onClick={()=>setIsPack(true)}>ยกแพค</button>
             </div>
           </div>
-
           {!isPack ? (
             <div className="price-grid">
               <div className="field"><span className="fl">ราคา / ชิ้น (CNY)</span><NumInput value={cny} onChange={setCny} prefix="¥" /></div>
@@ -581,12 +783,10 @@ function Main() {
             </div>
           ) : (
             <>
-              {/* Row 1: pack price inputs */}
               <div className="price-grid">
                 <div className="field"><span className="fl">ราคา / แพค (CNY)</span><NumInput value={packCny} onChange={setPackCny} prefix="¥" /></div>
                 <div className="field"><span className="fl">ชิ้น / แพค</span><NumInput value={packUnits} onChange={setPackUnits} suffix="ชิ้น" /></div>
               </div>
-              {/* Row 2: autofilled unit price + num packs */}
               <div className="price-grid" style={{marginTop:'10px'}}>
                 <div className="field">
                   <span className="fl">ราคา / ชิ้น <span className="autofill-chip">← อัตโนมัติ</span></span>
@@ -598,14 +798,13 @@ function Main() {
                 </div>
                 <div className="field"><span className="fl">จำนวนแพค</span><NumInput value={numPacks} onChange={setNumPacks} suffix="แพค" /></div>
               </div>
-              {/* Row 3: total qty */}
               <div style={{marginTop:'8px',display:'flex',alignItems:'center',justifyContent:'flex-end',gap:'5px',fontSize:'12px',color:'var(--text-3)'}}>
                 รวม <b className="num" style={{color:'var(--text)',fontWeight:500}}>{INT(totalQty)}</b> ชิ้น
               </div>
             </>
           )}
         </div>
-      ) : (
+      ) : mode==='rev' ? (
         <div className="card">
           <div className="card-label">ราคาขายคู่แข่งในไทย</div>
           <div className="price-grid">
@@ -622,11 +821,32 @@ function Main() {
             <NumInput value={compMargin} onChange={setCompMargin} suffix="% กำไร" />
           </div>
         </div>
+      ) : (
+        <>
+          {/* shared qty */}
+          <div className="cmp-qty-card">
+            <span className="cmp-qty-label">จำนวนที่ซื้อ</span>
+            <div className="cmp-qty-input">
+              <input inputMode="decimal" value={cmpQty} placeholder="100"
+                onChange={e=>setCmpQty(e.target.value.replace(/[^0-9.]/g,''))} />
+              <span className="qs">ชิ้น</span>
+            </div>
+          </div>
+          {/* supplier rows */}
+          {suppliers.map(s => (
+            <SupplierRow key={s.id} s={s}
+              cmpRank={rankById[s.id] || 0}
+              onChange={ns => updSupplier(s.id, ns)}
+              onDelete={() => delSupplier(s.id)}
+            />
+          ))}
+          <button className="addsup" onClick={addSupplier}><IconPlus /> เพิ่มร้านค้า</button>
+        </>
       )}
 
       <div className="fees-head">
         <span className="ft">ค่าธรรมเนียม &amp; ภาษี</span>
-        <span className="fc num">{fees.length} รายการ</span>
+        <span className="fc num">{fees.length} รายการ{mode==='cmp'?' · ใช้ร่วมกันทุกร้าน':''}</span>
       </div>
       {fees.map(f => <FeeRow key={f.id} fee={f} onChange={(nf)=>updFee(f.id,nf)} onDelete={()=>delFee(f.id)} />)}
       <button className="addfee" onClick={addFee}><IconPlus /> เพิ่มค่าธรรมเนียม</button>
@@ -640,7 +860,12 @@ function Main() {
         </div>
       )}
 
-      {mode==='fwd' ? <ResultFwd r={r} /> : <ResultRev c={comp} rate={rate} />}
+      {mode==='cmp'
+        ? <CompareResult results={cmpResults} qty={cmpQty} />
+        : mode==='fwd'
+          ? <ResultFwd r={r} />
+          : <ResultRev c={comp} rate={rate} />
+      }
 
       <div className="hint">ตัวเลขอัปเดตอัตโนมัติเมื่อพิมพ์ · อัตราแลกเปลี่ยนอัปเดตทุก 10 นาที</div>
     </div>
