@@ -889,6 +889,7 @@ function InvestmentSummary({ cmpResults, revResults, qty, sell }) {
 
 /* === PRODUCT LIST === */
 function ProductCard({p, onLoad, onDelete}) {
+  const [imgErr, setImgErr] = useState(false);
   const isRev = p.mode==='rev';
   const d = new Date(p.savedAt);
   const ds = `${d.getDate()}/${d.getMonth()+1}/${String(d.getFullYear()).slice(-2)}`;
@@ -903,6 +904,12 @@ function ProductCard({p, onLoad, onDelete}) {
     : (count > 1 ? `${count} ร้าน` : 'นำเข้า');
   return (
     <div className="pcard">
+      <div className="imgthumb" style={{width:44,height:44,borderRadius:9,cursor:'pointer',flexShrink:0}} onClick={onLoad}>
+        {p.image_url && !imgErr
+          ? <img src={p.image_url} alt="" onError={()=>setImgErr(true)} style={{width:'100%',height:'100%',objectFit:'cover'}} />
+          : <span className="it-icon"><IconPhoto /></span>
+        }
+      </div>
       <div className="pcard-body" onClick={onLoad}>
         <div className="pcard-name">{p.name}</div>
         <div className="pcard-meta">
