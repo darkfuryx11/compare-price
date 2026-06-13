@@ -211,6 +211,15 @@ body{
 .sup-cost-box .scb-val small{font-size:10px;font-weight:400;color:var(--text-3);margin-left:1px;}
 .sup-cost-box .scb-total{font-size:11px;color:var(--text-3);margin-top:2px;font-family:var(--mono);}
 .best .sup-cost-box .scb-val{color:var(--accent);}
+.cost-box-wrap{position:relative;}
+.cost-tooltip{display:none;position:absolute;bottom:calc(100% + 4px);left:-4px;right:-4px;background:var(--bg-card);border:0.5px solid var(--border-strong);border-radius:10px;padding:10px 12px;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,.18);pointer-events:none;min-width:180px;}
+.cost-box-wrap:hover .cost-tooltip{display:block;}
+.ct-row{display:flex;justify-content:space-between;gap:8px;padding:1.5px 0;font-size:11px;}
+.ct-row.ct-total{border-top:0.5px solid var(--border);margin-top:4px;padding-top:5px;}
+.ct-row .ct-label{color:var(--text-3);}
+.ct-row.ct-total .ct-label{color:var(--text-1);font-weight:500;}
+.ct-row .ct-val{font-family:var(--mono);color:var(--text-2);}
+.ct-row.ct-total .ct-val{color:var(--accent);font-weight:600;}
 .divider-soft{height:0.5px;background:var(--border);margin:14px 0;}
 
 /* compare result */
@@ -482,8 +491,9 @@ function computeForward(cny, qty, rate, fees, sell) {
   const pctTotal = goods*(pctRate/100);
   const total = goods+fixedTotal+pctTotal;
   const perUnit = qty ? total/qty : 0;
-  const lines = [{label:'ค่าสินค้า', val:goods}];
-  fees.forEach(f => { const a=parseFloat(f.amount)||0; const v=f.type==='percent'?goods*(a/100):a; lines.push({label:f.name||'ค่าธรรมเนียม',val:v,pct:f.type==='percent'?a:null}); });
+  const lines = [{label:'ค่าสินค้า', val:goods, mode:'goods'}];
+  fees.forEach(f => { const a=parseFloat(f.amount)||0; const v=f.type==='percent'?goods*(a/100):a; lines.push({label:f.name||'ค่าธรรมเนียม',val:v,pct:f.type==='percent'?a:null,mode:'add'}); });
+  lines.push({label:'ต้นทุนรวม/ชิ้น', val:qty?total/qty:0, mode:'total'});
   const s=parseFloat(sell)||0, revenue=s*qty, profit=revenue-total;
   const margin=revenue?(profit/revenue)*100:0, markup=total?(profit/total)*100:0;
   return {goods,total,perUnit,lines,hasSell:s>0,revenue,profit,margin,markup,profitUnit:qty?profit/qty:0,qty};
@@ -495,7 +505,11 @@ function computeCompetitor(packPrice, packQty, marginPct, rate, fees) {
   const fixedPerUnit=packQty?fixedTotal/packQty:0;
   const goodsThb=(unitCost-fixedPerUnit)/(1+pctRate/100);
   const cny=rate?goodsThb/rate:0;
-  return {unitSell,unitCost,fixedPerUnit,pctRate,goodsThb,cny,packPrice,packQty,marginPct:m,valid:goodsThb>0};
+  const lines=[{label:'ราคาขาย/ชิ้น',val:unitSell,mode:'sell'}];
+  if(m>0) lines.push({label:`กำไร (${m}%)`,val:unitSell-unitCost,mode:'deduct'});
+  fees.forEach(f=>{const a=parseFloat(f.amount)||0;const v=f.type==='percent'?goodsThb*(a/100):(packQty?a/packQty:0);if(a>0)lines.push({label:f.name||'ค่าธรรมเนียม',val:v,pct:f.type==='percent'?a:null,mode:'deduct'});});
+  lines.push({label:'ต้นทุนสินค้า',val:goodsThb,mode:'total'});
+  return {unitSell,unitCost,fixedPerUnit,pctRate,goodsThb,cny,packPrice,packQty,marginPct:m,valid:goodsThb>0,lines};
 }
 function computeAllSuppliers(suppliers, qty, rates, fees) {
   const q = parseFloat(qty)||1;
@@ -503,7 +517,7 @@ function computeAllSuppliers(suppliers, qty, rates, fees) {
     const uc = s.unitType==='pack' ? (parseFloat(s.packCny)||0)/(parseFloat(s.packUnits)||1) : (parseFloat(s.unitCny)||0);
     if (uc<=0) return null;
     const r = computeForward(uc, q, (rates[s.currency||'cny']||rates.cny), fees, '');
-    return {supplierId:s.id, name:s.name||'ร้านไม่มีชื่อ', effectiveUnitCny:uc, perUnit:r.perUnit, total:r.total, rank:0, isBest:false};
+    return {supplierId:s.id, name:s.name||'ร้านไม่มีชื่อ', effectiveUnitCny:uc, perUnit:r.perUnit, total:r.total, lines:r.lines, rank:0, isBest:false};
   }).filter(Boolean);
   results.sort((a,b)=>a.perUnit-b.perUnit);
   results.forEach((r,i)=>{r.rank=i+1;r.isBest=i===0;});
@@ -516,7 +530,7 @@ function computeAllCompetitors(competitors, rates, fees) {
     const ppThb = pp * ((rates[c.currency||'thb'])||1); // convert to THB
     const comp = computeCompetitor(ppThb, pq, parseFloat(c.compMargin)||0, rates.cny, fees);
     if(!comp.valid) return null;
-    return {compId:c.id, name:c.name||'ร้านไม่มีชื่อ', unitSell:comp.unitSell, unitCost:comp.unitCost, cny:comp.cny, goodsThb:comp.goodsThb, rank:0, isBest:false};
+    return {compId:c.id, name:c.name||'ร้านไม่มีชื่อ', unitSell:comp.unitSell, unitCost:comp.unitCost, cny:comp.cny, goodsThb:comp.goodsThb, lines:comp.lines, rank:0, isBest:false};
   }).filter(Boolean);
   results.sort((a,b)=>a.cny-b.cny);
   results.forEach((r,i)=>{r.rank=i+1;r.isBest=i===0;});
@@ -632,6 +646,20 @@ function ContactRow({item, onChange}) {
 }
 
 /* === SUPPLIER ROW (forward mode) === */
+function CostTooltip({lines}) {
+  if (!lines || !lines.length) return null;
+  return (
+    <div className="cost-tooltip">
+      {lines.map((l,i) => (
+        <div key={i} className={`ct-row${l.mode==='total'?' ct-total':''}`}>
+          <span className="ct-label">{l.label}{l.pct!=null?` (${l.pct}%)`:''}</span>
+          <span className="ct-val">{l.mode==='deduct'?'-':l.mode==='add'?'+':''}฿{fmt(l.val,2)}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function SupplierRow({s, cmpRank, cmpCost, onChange, onDelete}) {
   const isPack = s.unitType === 'pack';
   const ccy = s.currency || 'cny';
@@ -699,12 +727,15 @@ function SupplierRow({s, cmpRank, cmpCost, onChange, onDelete}) {
         )}
         <ContactRow item={s} onChange={onChange} />
         {cmpCost && cmpCost.perUnit > 0 && (
-          <div className="sup-cost-box">
-            <div className="scb-row">
-              <span className="scb-label">ต้นทุนรวมถึงไทย</span>
-              <span className="scb-val">฿{fmt(cmpCost.perUnit,2)}<small>/ชิ้น</small></span>
+          <div className="cost-box-wrap">
+            <div className="sup-cost-box">
+              <div className="scb-row">
+                <span className="scb-label">ต้นทุนรวมถึงไทย</span>
+                <span className="scb-val">฿{fmt(cmpCost.perUnit,2)}<small>/ชิ้น</small></span>
+              </div>
+              <div className="scb-total">รวม ฿{fmt(cmpCost.total,0)} ทั้งหมด</div>
             </div>
-            <div className="scb-total">รวม ฿{fmt(cmpCost.total,0)} ทั้งหมด</div>
+            <CostTooltip lines={cmpCost.lines} />
           </div>
         )}
       </div>
@@ -714,7 +745,7 @@ function SupplierRow({s, cmpRank, cmpCost, onChange, onDelete}) {
 }
 
 /* === COMPETITOR ROW (reverse mode) === */
-function CompetitorRow({c, cmpRank, onChange, onDelete}) {
+function CompetitorRow({c, cmpRank, revCost, onChange, onDelete}) {
   const ccy = c.currency || 'thb';
   const sym = CCY_SYM[ccy];
   const lbl = CCY_LABEL[ccy];
@@ -762,6 +793,18 @@ function CompetitorRow({c, cmpRank, onChange, onDelete}) {
           </>
         )}
         <ContactRow item={c} onChange={onChange} />
+        {revCost && revCost.goodsThb > 0 && (
+          <div className="cost-box-wrap">
+            <div className="sup-cost-box">
+              <div className="scb-row">
+                <span className="scb-label">ต้นทุนรวมถึงไทย</span>
+                <span className="scb-val">฿{fmt(revCost.goodsThb,2)}<small>/ชิ้น</small></span>
+              </div>
+              <div className="scb-total">≈ ¥{fmt(revCost.cny,4)} ต้นทุนจีน</div>
+            </div>
+            <CostTooltip lines={revCost.lines} />
+          </div>
+        )}
       </div>
       <button className="delbtn" onClick={onDelete} aria-label="ลบ"><IconX /></button>
     </div>
@@ -1126,7 +1169,8 @@ function Main() {
   const revResults = computeAllCompetitors(competitors, rates, fees);
   const rankById = Object.fromEntries(cmpResults.map(r => [r.supplierId, r.rank]));
   const revRankById = Object.fromEntries(revResults.map(r => [r.compId, r.rank]));
-  const costById = Object.fromEntries(cmpResults.map(r => [r.supplierId, {perUnit:r.perUnit, total:r.total}]));
+  const costById = Object.fromEntries(cmpResults.map(r => [r.supplierId, {perUnit:r.perUnit, total:r.total, lines:r.lines}]));
+  const revCostById = Object.fromEntries(revResults.map(r => [r.compId, {goodsThb:r.goodsThb, cny:r.cny, lines:r.lines}]));
   const _spq = parseFloat(sellPackQty)||0;
   const _spp = parseFloat(sellPackPrice)||0;
   const effectiveSell = sellMode==='pack' ? (_spq>0 && _spp>0 ? String(_spp/_spq) : '') : sell;
@@ -1313,6 +1357,7 @@ function Main() {
             {competitors.map(c => (
               <CompetitorRow key={c.id} c={c}
                 cmpRank={revRankById[c.id]||0}
+                revCost={revCostById[c.id]||null}
                 onChange={nc=>setCompetitors(prev=>prev.map(x=>x.id===c.id?nc:x))}
                 onDelete={()=>setCompetitors(prev=>prev.filter(x=>x.id!==c.id))}
               />
