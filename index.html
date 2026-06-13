@@ -38,13 +38,34 @@ body{
 .mobile-hidden{display:none;}
 .col-hd{font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--text-2);margin-bottom:12px;padding:0 2px;}
 @media(min-width:900px){
-  #root{max-width:1000px;}
+  #root{max-width:1400px;}
   .app{padding:6px 24px 4px;}
   .dual-col{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;}
   .mobile-only{display:none;}
   .desktop-only{display:block;}
   .mobile-hidden{display:block;}
   .fab-save{right:24px;}
+
+  /* === desktop column grid: suppliers / competitors side-by-side === */
+  .sup-col-grid{display:grid;gap:10px;margin-bottom:10px;align-items:stretch;}
+  .sup-col-grid .sup-row{position:relative;flex-direction:column;align-items:stretch;margin-bottom:0;padding:14px 12px 12px;box-sizing:border-box;}
+  .sup-col-grid .sup-col{gap:9px;}
+  /* top section: rank(abs) + big image centered + name */
+  .sup-col-grid .sup-name-row{flex-direction:column;align-items:center;gap:7px;padding-top:24px;padding-bottom:11px;border-bottom:0.5px solid var(--border);position:relative;}
+  .sup-col-grid .imgthumb{width:72px!important;height:72px!important;border-radius:12px!important;}
+  .sup-col-grid .sup-rank{position:absolute;top:0;left:0;}
+  .sup-col-grid .sup-name-input{text-align:center;font-size:13px;}
+  /* delete button floats top-right of card */
+  .sup-col-grid .delbtn{position:absolute;top:6px;right:6px;height:26px;width:26px;}
+  /* single-column fields inside card */
+  .sup-col-grid .sup-fields{grid-template-columns:1fr;}
+  .sup-col-grid .sup-inputwrap{min-height:38px;}
+  .sup-col-grid .sup-inputwrap input,.sup-col-grid .sup-autofill .av{font-size:14px;}
+  .sup-col-grid .sf-label{font-size:10px;}
+  .sup-col-grid .mode-chips button{font-size:10.5px;min-height:24px;padding:2px 7px;}
+  /* contact row compact */
+  .sup-col-grid .sup-meta-wrap{min-height:30px;}
+  .sup-col-grid .sup-meta-wrap input{font-size:11.5px;}
 }
 .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;}
 
@@ -1116,13 +1137,15 @@ function Main() {
               <span className="qs">ชิ้น</span>
             </div>
           </div>
-          {suppliers.map(s => (
-            <SupplierRow key={s.id} s={s}
-              cmpRank={rankById[s.id]||0}
-              onChange={ns=>setSuppliers(prev=>prev.map(x=>x.id===s.id?ns:x))}
-              onDelete={()=>setSuppliers(prev=>prev.filter(x=>x.id!==s.id))}
-            />
-          ))}
+          <div className="sup-col-grid" style={{gridTemplateColumns:`repeat(${suppliers.length},1fr)`}}>
+            {suppliers.map(s => (
+              <SupplierRow key={s.id} s={s}
+                cmpRank={rankById[s.id]||0}
+                onChange={ns=>setSuppliers(prev=>prev.map(x=>x.id===s.id?ns:x))}
+                onDelete={()=>setSuppliers(prev=>prev.filter(x=>x.id!==s.id))}
+              />
+            ))}
+          </div>
           <button className="addrow-btn" onClick={()=>setSuppliers(prev=>[...prev,newSupplier()])}><IconPlus /> เพิ่มร้านค้า</button>
           <div className="card" style={{marginTop:'14px'}}>
             <div className="field">
@@ -1136,13 +1159,15 @@ function Main() {
         {/* ── RIGHT: ไทย → จีน ── */}
         <div className={mode!=='rev'?'mobile-hidden':''}>
           <div className="col-hd desktop-only">ราคาไทย <span style={{color:'var(--text-3)'}}>→</span> จีน</div>
-          {competitors.map(c => (
-            <CompetitorRow key={c.id} c={c}
-              cmpRank={revRankById[c.id]||0}
-              onChange={nc=>setCompetitors(prev=>prev.map(x=>x.id===c.id?nc:x))}
-              onDelete={()=>setCompetitors(prev=>prev.filter(x=>x.id!==c.id))}
-            />
-          ))}
+          <div className="sup-col-grid" style={{gridTemplateColumns:`repeat(${competitors.length},1fr)`}}>
+            {competitors.map(c => (
+              <CompetitorRow key={c.id} c={c}
+                cmpRank={revRankById[c.id]||0}
+                onChange={nc=>setCompetitors(prev=>prev.map(x=>x.id===c.id?nc:x))}
+                onDelete={()=>setCompetitors(prev=>prev.filter(x=>x.id!==c.id))}
+              />
+            ))}
+          </div>
           <button className="addrow-btn" onClick={()=>setCompetitors(prev=>[...prev,newCompetitor()])}><IconPlus /> เพิ่มร้าน / คู่แข่ง</button>
           <CompareRevResult results={revResults} />
         </div>
