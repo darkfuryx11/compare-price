@@ -199,6 +199,15 @@ body{
 .unittoggle button.on{background:var(--accent);color:#fff;}
 .addfee{width:100%;min-height:46px;border:0.5px dashed var(--border-strong);background:transparent;border-radius:var(--r-md);color:var(--text-2);font-family:inherit;font-size:13.5px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:2px;-webkit-appearance:none;appearance:none;transition:border-color .15s,color .15s;}
 .addfee:active{border-color:var(--accent);color:var(--accent);}
+.reset-fees-btn{padding:3px 9px;border:0.5px solid var(--border-strong);background:transparent;border-radius:6px;color:var(--text-3);font-family:inherit;font-size:11px;font-weight:500;cursor:pointer;-webkit-appearance:none;appearance:none;transition:border-color .15s,color .15s;}
+.reset-fees-btn:active{border-color:var(--accent);color:var(--accent);}
+.sup-cost-box{margin-top:10px;padding:8px 10px;background:var(--bg-inset);border-radius:var(--r-sm);border:0.5px solid var(--border);}
+.sup-cost-box .scb-row{display:flex;align-items:baseline;justify-content:space-between;gap:4px;}
+.sup-cost-box .scb-label{font-size:11px;color:var(--text-3);flex-shrink:0;}
+.sup-cost-box .scb-val{font-size:14px;font-weight:600;color:var(--text-1);font-family:var(--mono);}
+.sup-cost-box .scb-val small{font-size:10px;font-weight:400;color:var(--text-3);margin-left:1px;}
+.sup-cost-box .scb-total{font-size:11px;color:var(--text-3);margin-top:2px;font-family:var(--mono);}
+.best .sup-cost-box .scb-val{color:var(--accent);}
 .divider-soft{height:0.5px;background:var(--border);margin:14px 0;}
 
 /* compare result */
@@ -620,7 +629,7 @@ function ContactRow({item, onChange}) {
 }
 
 /* === SUPPLIER ROW (forward mode) === */
-function SupplierRow({s, cmpRank, onChange, onDelete}) {
+function SupplierRow({s, cmpRank, cmpCost, onChange, onDelete}) {
   const isPack = s.unitType === 'pack';
   const ccy = s.currency || 'cny';
   const sym = CCY_SYM[ccy];
@@ -686,6 +695,15 @@ function SupplierRow({s, cmpRank, onChange, onDelete}) {
           </>
         )}
         <ContactRow item={s} onChange={onChange} />
+        {cmpCost && cmpCost.perUnit > 0 && (
+          <div className="sup-cost-box">
+            <div className="scb-row">
+              <span className="scb-label">ต้นทุนรวมถึงไทย</span>
+              <span className="scb-val">฿{fmt(cmpCost.perUnit,2)}<small>/ชิ้น</small></span>
+            </div>
+            <div className="scb-total">รวม ฿{fmt(cmpCost.total,0)} ทั้งหมด</div>
+          </div>
+        )}
       </div>
       <button className="delbtn" onClick={onDelete} aria-label="ลบ"><IconX /></button>
     </div>
@@ -1055,6 +1073,9 @@ function Main() {
   const [suppliers, setSuppliers] = useState(demoSuppliers);
   const [qty, setQty] = useState('100');
   const [sell, setSell] = useState('');
+  const [sellMode, setSellMode] = useState('pack');
+  const [sellPackPrice, setSellPackPrice] = useState('');
+  const [sellPackQty, setSellPackQty] = useState('100');
   /* reverse */
   const [competitors, setCompetitors] = useState(demoCompetitors);
 
@@ -1063,6 +1084,10 @@ function Main() {
   const revResults = computeAllCompetitors(competitors, rates, fees);
   const rankById = Object.fromEntries(cmpResults.map(r => [r.supplierId, r.rank]));
   const revRankById = Object.fromEntries(revResults.map(r => [r.compId, r.rank]));
+  const costById = Object.fromEntries(cmpResults.map(r => [r.supplierId, {perUnit:r.perUnit, total:r.total}]));
+  const _spq = parseFloat(sellPackQty)||0;
+  const _spp = parseFloat(sellPackPrice)||0;
+  const effectiveSell = sellMode==='pack' ? (_spq>0 && _spp>0 ? String(_spp/_spq) : '') : sell;
 
   const updFee = (id,nf) => setFees(fees.map(f=>f.id===id?nf:f));
   const delFee = (id) => setFees(fees.filter(f=>f.id!==id));
@@ -1082,7 +1107,7 @@ function Main() {
       id, name, mode,
       inputs: {
         suppliers: suppliers.map(s=>({...s})),
-        qty, sell,
+        qty, sell, sellMode, sellPackPrice, sellPackQty,
         competitors: competitors.map(c=>({...c})),
       },
       fees: fees.map(f=>({...f})),
@@ -1123,6 +1148,9 @@ function Main() {
     }
     setQty(p.inputs.qty||p.inputs.cmpQty||'100');
     setSell(p.inputs.sell||'');
+    setSellMode(p.inputs.sellMode||'pack');
+    setSellPackPrice(p.inputs.sellPackPrice||'');
+    setSellPackQty(p.inputs.sellPackQty||'100');
     // Always load competitors — fix: same reason
     if (Array.isArray(p.inputs.competitors) && p.inputs.competitors.length > 0) {
       setCompetitors(p.inputs.competitors.map(c=>({...c,id:uid()})));
@@ -1148,6 +1176,7 @@ function Main() {
   const newProduct = () => {
     setProductName(''); setProductId(null); setMode('fwd'); setProductImage('');
     setFees(demoFees()); setSuppliers(demoSuppliers()); setQty('100'); setSell('');
+    setSellMode('pack'); setSellPackPrice(''); setSellPackQty('100');
     setCompetitors(demoCompetitors());
   };
 
@@ -1192,6 +1221,7 @@ function Main() {
             {suppliers.map(s => (
               <SupplierRow key={s.id} s={s}
                 cmpRank={rankById[s.id]||0}
+                cmpCost={costById[s.id]||null}
                 onChange={ns=>setSuppliers(prev=>prev.map(x=>x.id===s.id?ns:x))}
                 onDelete={()=>setSuppliers(prev=>prev.filter(x=>x.id!==s.id))}
               />
@@ -1199,12 +1229,34 @@ function Main() {
           </div>
           <button className="addrow-btn" onClick={()=>setSuppliers(prev=>[...prev,newSupplier()])}><IconPlus /> เพิ่มร้านค้า</button>
           <div className="card" style={{marginTop:'14px'}}>
-            <div className="field">
-              <span className="fl">ราคาขายในไทย / ชิ้น — ใส่เพื่อดูกำไร (ไม่บังคับ)</span>
-              <NumInput value={sell} onChange={setSell} prefix="฿" suffix="THB" />
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:8,gap:8}}>
+              <span className="fl" style={{marginBottom:0}}>ราคาขายในไทย — ดูกำไร (ไม่บังคับ)</span>
+              <div className="mode-chips">
+                <button className={sellMode==='unit'?'active':''} onClick={()=>setSellMode('unit')}>ต่อชิ้น</button>
+                <button className={sellMode==='pack'?'active':''} onClick={()=>setSellMode('pack')}>ยกแพค</button>
+              </div>
             </div>
+            {sellMode==='unit' ? (
+              <div className="field" style={{marginBottom:0}}>
+                <NumInput value={sell} onChange={setSell} prefix="฿" suffix="/ชิ้น" />
+              </div>
+            ) : (
+              <div style={{display:'flex',gap:8,alignItems:'flex-end'}}>
+                <div className="field" style={{flex:1,marginBottom:0}}>
+                  <span className="fl">ราคา / ลัง (฿)</span>
+                  <NumInput value={sellPackPrice} onChange={setSellPackPrice} prefix="฿" suffix="" />
+                </div>
+                <div className="field" style={{width:95,marginBottom:0}}>
+                  <span className="fl">ชิ้น / ลัง</span>
+                  <NumInput value={sellPackQty} onChange={setSellPackQty} prefix="" suffix="ชิ้น" />
+                </div>
+              </div>
+            )}
+            {sellMode==='pack' && _spp>0 && _spq>0 && (
+              <div className="sup-derived" style={{marginTop:6}}>= ฿{fmt(_spp/_spq,2)}/ชิ้น</div>
+            )}
           </div>
-          <CompareResult results={cmpResults} qty={qty} sell={sell} fees={fees} rate={rate} />
+          <CompareResult results={cmpResults} qty={qty} sell={effectiveSell} fees={fees} rate={rate} />
         </div>
 
         {/* ── RIGHT: ไทย → จีน ── */}
@@ -1227,12 +1279,15 @@ function Main() {
       {/* Shared fees — full width */}
       <div className="fees-head" style={{marginTop:'16px'}}>
         <span className="ft">ค่าธรรมเนียม &amp; ภาษี</span>
-        <span className="fc num">{fees.length} รายการ · ใช้ร่วมกัน</span>
+        <div style={{display:'flex',gap:6,alignItems:'center'}}>
+          <button className="reset-fees-btn" onClick={()=>setFees(demoFees())}>↺ มาตรฐาน</button>
+          <span className="fc num">{fees.length} รายการ · ใช้ร่วมกัน</span>
+        </div>
       </div>
       {fees.map(f => <FeeRow key={f.id} fee={f} onChange={(nf)=>updFee(f.id,nf)} onDelete={()=>delFee(f.id)} />)}
       <button className="addfee" onClick={addFee}><IconPlus /> เพิ่มค่าธรรมเนียม</button>
 
-      <InvestmentSummary cmpResults={cmpResults} revResults={revResults} qty={qty} sell={sell} />
+      <InvestmentSummary cmpResults={cmpResults} revResults={revResults} qty={qty} sell={effectiveSell} />
 
       <div className="hint" style={{paddingBottom:'80px'}}>ตัวเลขอัปเดตอัตโนมัติเมื่อพิมพ์ · อัตราแลกเปลี่ยนอัปเดตทุก 10 นาที</div>
 
