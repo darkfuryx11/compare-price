@@ -121,6 +121,11 @@ body{
 .mode-chips{display:flex;gap:2px;background:var(--bg-inset);border:0.5px solid var(--border);border-radius:7px;padding:2px;}
 .mode-chips button{padding:3px 9px;border:none;border-radius:5px;font-family:inherit;font-size:11px;font-weight:500;color:var(--text-3);background:transparent;cursor:pointer;min-height:26px;-webkit-appearance:none;appearance:none;}
 .mode-chips button.active{background:var(--bg-card);color:var(--text);border:0.5px solid var(--border);}
+.img-fob-wrap{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;}
+.fob-chips{display:flex;gap:1.5px;background:var(--bg-inset);border:0.5px solid var(--border);border-radius:6px;padding:1.5px;}
+.fob-chips button{padding:2px 8px;border:none;border-radius:4px;font-family:inherit;font-size:10.5px;font-weight:700;color:var(--text-3);background:transparent;cursor:pointer;-webkit-appearance:none;appearance:none;letter-spacing:.04em;min-height:20px;}
+.fob-chips .fob.active{background:#2563eb;color:#fff;}
+.fob-chips .exw.active{background:#d97706;color:#fff;}
 .ccy-chips{display:flex;gap:2px;background:var(--bg-inset);border:0.5px solid var(--border);border-radius:7px;padding:2px;flex-wrap:wrap;}
 .ccy-chips button{padding:2px 7px;border:none;border-radius:5px;font-family:inherit;font-size:11px;font-weight:500;color:var(--text-3);background:transparent;cursor:pointer;min-height:24px;-webkit-appearance:none;appearance:none;white-space:nowrap;}
 .ccy-chips button.active{background:var(--accent);color:#fff;}
@@ -516,7 +521,8 @@ function computeAllSuppliers(suppliers, qty, rates, fees) {
   const results = suppliers.map(s => {
     const uc = s.unitType==='pack' ? (parseFloat(s.packCny)||0)/(parseFloat(s.packUnits)||1) : (parseFloat(s.unitCny)||0);
     if (uc<=0) return null;
-    const r = computeForward(uc, q, (rates[s.currency||'cny']||rates.cny), fees, '');
+    const ucFinal = (s.priceMode||'fob')==='exw' ? uc*1.10 : uc;
+    const r = computeForward(ucFinal, q, (rates[s.currency||'cny']||rates.cny), fees, '');
     return {supplierId:s.id, name:s.name||'ร้านไม่มีชื่อ', effectiveUnitCny:uc, perUnit:r.perUnit, total:r.total, lines:r.lines, rank:0, isBest:false};
   }).filter(Boolean);
   results.sort((a,b)=>a.perUnit-b.perUnit);
@@ -667,11 +673,18 @@ function SupplierRow({s, cmpRank, cmpCost, onChange, onDelete}) {
   const lbl = CCY_LABEL[ccy];
   const uc = isPack ? (parseFloat(s.packCny)||0)/(parseFloat(s.packUnits)||1) : 0;
   const isBest = cmpRank === 1;
+  const priceMode = s.priceMode || 'fob';
   return (
     <div className={`sup-row${isBest?' best':''}`}>
       <div className="sup-col">
         <div className="sup-name-row">
-          <ImageThumb url={s.image_url||''} size={36} onChangeUrl={url=>onChange({...s,image_url:url})} />
+          <div className="img-fob-wrap">
+            <ImageThumb url={s.image_url||''} size={36} onChangeUrl={url=>onChange({...s,image_url:url})} />
+            <div className="fob-chips">
+              <button className={`fob${priceMode==='fob'?' active':''}`} onClick={()=>onChange({...s,priceMode:'fob'})}>FOB</button>
+              <button className={`exw${priceMode==='exw'?' active':''}`} onClick={()=>onChange({...s,priceMode:'exw'})}>EXW</button>
+            </div>
+          </div>
           {cmpRank > 0 && <div className="sup-rank">{cmpRank}</div>}
           <input className="sup-name-input" value={s.name} placeholder="ชื่อร้านค้า"
             onChange={e => onChange({...s, name:e.target.value})} />
@@ -1070,12 +1083,12 @@ const loadDefaultFees = () => {
   }
 };
 const demoFees = () => loadDefaultFees();
-const newSupplier = () => ({id:uid(), name:'', unitType:'unit', currency:'cny', unitCny:'', packCny:'', packUnits:'100', link:'', contact:'', image_url:''});
+const newSupplier = () => ({id:uid(), name:'', unitType:'unit', currency:'cny', priceMode:'fob', unitCny:'', packCny:'', packUnits:'100', link:'', contact:'', image_url:''});
 const newCompetitor = () => ({id:uid(), name:'', currency:'thb', packPrice:'', packQty:'100', compMargin:'', link:'', contact:'', image_url:''});
 const demoSuppliers = () => ([
-  {id:uid(), name:'ร้าน A', unitType:'unit', currency:'cny', unitCny:'4.50', packCny:'',    packUnits:'100',  link:'', contact:'', image_url:''},
-  {id:uid(), name:'ร้าน B', unitType:'pack', currency:'cny', unitCny:'',     packCny:'350', packUnits:'100',  link:'', contact:'', image_url:''},
-  {id:uid(), name:'ร้าน C', unitType:'pack', currency:'cny', unitCny:'',     packCny:'2800',packUnits:'1000', link:'', contact:'', image_url:''},
+  {id:uid(), name:'ร้าน A', unitType:'unit', currency:'cny', priceMode:'fob', unitCny:'4.50', packCny:'',    packUnits:'100',  link:'', contact:'', image_url:''},
+  {id:uid(), name:'ร้าน B', unitType:'pack', currency:'cny', priceMode:'fob', unitCny:'',     packCny:'350', packUnits:'100',  link:'', contact:'', image_url:''},
+  {id:uid(), name:'ร้าน C', unitType:'pack', currency:'cny', priceMode:'fob', unitCny:'',     packCny:'2800',packUnits:'1000', link:'', contact:'', image_url:''},
 ]);
 const demoCompetitors = () => ([
   {id:uid(), name:'คู่แข่ง A', currency:'thb', packPrice:'32000', packQty:'100', compMargin:'30', link:'', contact:'', image_url:''},
