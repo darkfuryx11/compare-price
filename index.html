@@ -201,6 +201,9 @@ body{
 .addfee:active{border-color:var(--accent);color:var(--accent);}
 .reset-fees-btn{padding:3px 9px;border:0.5px solid var(--border-strong);background:transparent;border-radius:6px;color:var(--text-3);font-family:inherit;font-size:11px;font-weight:500;cursor:pointer;-webkit-appearance:none;appearance:none;transition:border-color .15s,color .15s;}
 .reset-fees-btn:active{border-color:var(--accent);color:var(--accent);}
+.subtab-bar{display:flex;gap:2px;padding:4px 16px 10px;border-bottom:0.5px solid var(--border);margin-bottom:2px;}
+.subtab-bar button{padding:5px 14px;border:none;background:transparent;border-radius:8px;font-family:inherit;font-size:13px;font-weight:500;color:var(--text-3);cursor:pointer;-webkit-appearance:none;appearance:none;}
+.subtab-bar button.active{background:var(--bg-inset);color:var(--text-1);font-weight:600;}
 .sup-cost-box{margin-top:10px;padding:8px 10px;background:var(--bg-inset);border-radius:var(--r-sm);border:0.5px solid var(--border);}
 .sup-cost-box .scb-row{display:flex;align-items:baseline;justify-content:space-between;gap:4px;}
 .sup-cost-box .scb-label{font-size:11px;color:var(--text-3);flex-shrink:0;}
@@ -1005,15 +1008,25 @@ function ProductList({products, onLoad, onDelete, onBack}) {
 const getTiktokCommissionPct = () => {
   try { return parseFloat(localStorage.getItem('ss_tiktok_commission_pct')) || 20; } catch(e) { return 20; }
 };
-const demoFees = () => ([
-  {id:uid(), name:'ค่าโอนต่างประเทศ',   amount:'2',                              type:'fixed'},
-  {id:uid(), name:'ค่านำเข้า',          amount:'20',                             type:'percent'},
-  {id:uid(), name:'คนขนส่งในประเทศ',    amount:'0',                              type:'fixed'},
-  {id:uid(), name:'ค่าขนส่งต่างประเทศ', amount:'0',                              type:'fixed'},
-  {id:uid(), name:'ค่าพนักงาน',         amount:'5',                              type:'percent'},
-  {id:uid(), name:'ค่าคอมแพลตฟอร์ม',   amount:String(getTiktokCommissionPct()), type:'percent'},
-  {id:uid(), name:'ค่า Ads',            amount:'5',                              type:'percent'},
-]);
+const getHardcodedFees = () => [
+  {name:'ค่าโอนต่างประเทศ',   amount:'2',                              type:'fixed'},
+  {name:'ค่านำเข้า',          amount:'20',                             type:'percent'},
+  {name:'คนขนส่งในประเทศ',    amount:'0',                              type:'fixed'},
+  {name:'ค่าขนส่งต่างประเทศ', amount:'0',                              type:'fixed'},
+  {name:'ค่าพนักงาน',         amount:'5',                              type:'percent'},
+  {name:'ค่าคอมแพลตฟอร์ม',   amount:String(getTiktokCommissionPct()), type:'percent'},
+  {name:'ค่า Ads',            amount:'5',                              type:'percent'},
+];
+const loadDefaultFees = () => {
+  try {
+    const saved = localStorage.getItem('cp_default_fees');
+    const base = saved ? JSON.parse(saved) : getHardcodedFees();
+    return base.map(f => ({...f, id:uid()}));
+  } catch(e) {
+    return getHardcodedFees().map(f => ({...f, id:uid()}));
+  }
+};
+const demoFees = () => loadDefaultFees();
 const newSupplier = () => ({id:uid(), name:'', unitType:'unit', currency:'cny', unitCny:'', packCny:'', packUnits:'100', link:'', contact:'', image_url:''});
 const newCompetitor = () => ({id:uid(), name:'', currency:'thb', packPrice:'', packQty:'100', compMargin:'', link:'', contact:'', image_url:''});
 const demoSuppliers = () => ([
@@ -1027,9 +1040,38 @@ const demoCompetitors = () => ([
 ]);
 
 /* === MAIN === */
+function DefaultFeesEditor() {
+  const [fees, setFees] = useState(loadDefaultFees);
+  const [flash, setFlash] = useState(false);
+  const updFee = (id,nf) => setFees(fees.map(f=>f.id===id?nf:f));
+  const delFee = (id) => setFees(fees.filter(f=>f.id!==id));
+  const addFee = () => setFees([...fees,{id:uid(),name:'',amount:'',type:'fixed'}]);
+  const save = () => {
+    saveLS('cp_default_fees', fees.map(({id,...f})=>f));
+    setFlash(true); setTimeout(()=>setFlash(false), 1500);
+  };
+  return (
+    <div style={{padding:'16px 16px 100px'}}>
+      <div style={{fontSize:12,color:'var(--text-3)',marginBottom:12,lineHeight:1.6}}>
+        ค่าธรรมเนียมชุดนี้จะถูกโหลดเมื่อกด ↺ มาตรฐาน หรือสร้างสินค้าใหม่
+      </div>
+      {fees.map(f => (
+        <FeeRow key={f.id} fee={f}
+          onChange={nf=>updFee(f.id,nf)}
+          onDelete={()=>delFee(f.id)} />
+      ))}
+      <button className="addfee" onClick={addFee}><IconPlus /> เพิ่มค่าธรรมเนียม</button>
+      <button className={`fab-save${flash?' flash':''}`} onClick={save}>
+        <IconSave />{flash?'บันทึกแล้ว ✓':'บันทึกเป็นมาตรฐาน'}
+      </button>
+    </div>
+  );
+}
+
 function Main() {
   const {rates, rate, info, refresh} = useExchangeRate();
   const [screen, setScreen] = useState('calc');
+  const [tab, setTab] = useState('calc');
   const [products, setProducts] = useState(() => IS_EMBEDDED ? [] : loadLS('cp_products', []));
   const [productName, setProductName] = useState('');
   const [productId, setProductId] = useState(null);
@@ -1189,6 +1231,10 @@ function Main() {
         <div className="title">นำเข้าจากจีน<small>Landed-cost calculator</small></div>
         <div style={{width:'38px'}}></div>
       </div>
+      <div className="subtab-bar">
+        <button className={tab==='calc'?'active':''} onClick={()=>setTab('calc')}>คำนวณ</button>
+        <button className={tab==='fees'?'active':''} onClick={()=>setTab('fees')}>ค่าธรรมเนียมมาตรฐาน</button>
+      </div>
 
       <div className="name-row">
         <ImageThumb url={productImage} size={40} onChangeUrl={setProductImage} />
@@ -1202,6 +1248,7 @@ function Main() {
 
       <RateBar rate={rate} info={info} onRefresh={refresh} />
 
+      {tab==='fees' ? <DefaultFeesEditor /> : <>
       {/* Mobile only: mode toggle */}
       <div className="mobile-only"><ModeToggle mode={mode} onMode={setMode} /></div>
 
@@ -1296,6 +1343,7 @@ function Main() {
         <IconSave />
         {savedFlash ? 'บันทึกแล้ว ✓' : 'บันทึก'}
       </button>
+      </>}
     </div>
   );
 }
